@@ -8,13 +8,13 @@ Este projeto foi criado como parte da disciplina de Projetos 2 na CESAR School -
  
 ## Funcionalidades
 
-- **Feed Educativo**
+1. **Feed Educativo**
 
 >O usuário pode acessar uma página inicial com postagens educativas sobre sustentabilidade, visualizar dicas de reuso e compartilhar suas próprias práticas.
 
 >Visualização de posts de outros usuários e informações disponibilizadas por administradores.
 
-- **Compras Sustentáveis**
+2. **Compras Sustentáveis**
 
 >O usuário pode comprar produtos feitos a partir de materiais reutilizados diretamente pela plataforma, com opção de retirada presencial ou entrega.
 
@@ -24,19 +24,19 @@ Este projeto foi criado como parte da disciplina de Projetos 2 na CESAR School -
 
 >Visualização de detalhes dos produtos e pagamento.
 
-- **Localização de Pontos de Doação e Vendas**
+3. **Localização de Pontos de Doação e Vendas**
 
 >O administrador pode cadastrar novos pontos de doação e lojas que vendem produtos reutilizados.
 
 >O usuário pode visualizar no mapa a localização desses pontos e obter informações detalhadas sobre horários e serviços.
 
-- **Sistema de Pontuação e Recompensas**
+4. **Sistema de Pontuação e Recompensas**
 
 >O usuário pode visualizar seus créditos acumulados por ações sustentáveis e trocá-los por recompensas.
 
 >Notificação ao atingir crédito suficiente para novas recompensas.
 
-- **Reciclagem e Doações**
+5. **Reciclagem e Doações**
 
 >O usuário pode acessar uma seção para doar ou reciclar itens têxteis, com informações sobre opções de envio e acompanhamento dos créditos gerados pelos resíduos reciclados.
 
@@ -64,6 +64,6 @@ Este projeto é licenciado sob a [MIT License](https://opensource.org/licenses/M
 - [Guilherme Mourão](https://github.com/guilhermemouraovc) - gmvc@cesar.school
 - [Henrique Figueiredo](https://github.com/fthenri) - hft@cesar.school
 - [Jeronimo Rossi](https://github.com/Jeraross) - jbr2@cesar.school
-- [Luis Guilherme](https://github.com/) - @cesar.school
-- [Joao Lucas](https://github.com/) - @cesar.school
-- [Caio Ferreira](https://github.com/) - @cesar.school
+- [Luis Guilherme](https://github.com/luisgxlauria) - lgals@cesar.school
+- [Joao Lucas](https://github.com/JRobalinho) - jlvrf@cesar.school
+- [Caio Ferreira](https://github.com/CaioLira18) - cflo@cesar.school
