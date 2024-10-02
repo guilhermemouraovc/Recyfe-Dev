@@ -14,15 +14,11 @@ Este projeto foi criado como parte da disciplina de Projetos 2 na CESAR School -
 
 >Visualização de posts de outros usuários e informações disponibilizadas por administradores.
 
-2. **Compras Sustentáveis**
+2. **Navegação de Produtos**
 
 >O usuário pode comprar produtos feitos a partir de materiais reutilizados diretamente pela plataforma, com opção de retirada presencial ou entrega.
 
->Adição de produtos ao carrinho.
-
->Opção de escolher entre retirada presencial ou entrega.
-
->Visualização de detalhes dos produtos e pagamento.
+>Visualização de detalhes dos produtos.
 
 3. **Localização de Pontos de Doação e Vendas**
 
