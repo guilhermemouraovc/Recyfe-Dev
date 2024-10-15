@@ -47,7 +47,7 @@ Este projeto foi criado como parte da disciplina de Projetos 2 na CESAR School -
 
 ## Ferramentas
 
-- **Prototipação**: Whimsical - Utilizado para criar e validar protótipos de design da interface do usuário.
+- **Prototipação**: Figma - Utilizado para criar e validar protótipos de design da interface do usuário.
 - **Gestão de Projetos**: Jira - Ferramenta para o planejamento e acompanhamento das tarefas do projeto.
 - **Comunicação e Reuniões**: Discord/WhatsApp - Plataformas utilizadas para reuniões e comunicação da equipe.
 
