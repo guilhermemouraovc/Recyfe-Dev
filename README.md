@@ -6,37 +6,31 @@ Recyfe é um aplicativo desenvolvido com o objetivo de incentivar a reciclagem e
 
 Este projeto foi criado como parte da disciplina de Projetos 2 na CESAR School - turma 2024.2.
  
-## Funcionalidades
+## Funcionalidades / Historias
 
-1. **Feed Educativo**
+1. **Visualização do Feed**
 
->O usuário pode acessar uma página inicial com postagens educativas sobre sustentabilidade, visualizar dicas de reuso e compartilhar suas próprias práticas.
+>Como usuário, quero acessar uma página inicial clara e visualmente atraente, onde posso visualizar posts de outros usuários.
 
->Visualização de posts de outros usuários e informações disponibilizadas por administradores.
+2. **Postagem de Práticas Sustentáveis**
 
-2. **Navegação de Produtos**
+>Como usuário, quero postar minhas próprias práticas sobre sustentabilidade na página inicial.
 
->O usuário pode comprar produtos feitos a partir de materiais reutilizados diretamente pela plataforma, com opção de retirada presencial ou entrega.
+3. **Navegação de Produtos**
 
->Visualização de detalhes dos produtos.
+>Como usuário, quero poder visualizar detalhes completos dos produtos. Desejo ver a imagem do produto, sua descrição e o tipo de material reutilizado.
 
-3. **Localização de Pontos de Doação e Vendas**
+4. **Localização de Pontos de Doação e Vendas**
 
->O administrador pode cadastrar novos pontos de doação e lojas que vendem produtos reutilizados.
+>Como administrador, quero disponibilizar no aplicativo, por meio de GPS, a localização dos pontos de doação e das lojas que vendem produtos reutilizados.
 
->O usuário pode visualizar no mapa a localização desses pontos e obter informações detalhadas sobre horários e serviços.
+5. **Sistema de Pontuação e Recompensas**
 
-4. **Sistema de Pontuação e Recompensas**
+>Como usuário, quero acessar uma aba de recompensas, onde posso visualizar os créditos acumulados por minhas ações sustentáveis e escolher diferentes tipos de recompensas.
 
->O usuário pode visualizar seus créditos acumulados por ações sustentáveis e trocá-los por recompensas.
+6. **Catalogação de Créditos e Opções de Envio**
 
->Notificação ao atingir crédito suficiente para novas recompensas.
-
-5. **Reciclagem e Doações**
-
->O usuário pode acessar uma seção para doar ou reciclar itens têxteis, com informações sobre opções de envio e acompanhamento dos créditos gerados pelos resíduos reciclados.
-
->Acompanhamento dos créditos recebidos por item reciclado.
+>Como usuário, desejo acessar uma seção onde posso ver informações sobre opções de envio de residuos texteis para reuso e catalogação de créditos por resíduo enviado.
 
 ## Tecnologias
 
@@ -63,3 +57,42 @@ Este projeto é licenciado sob a [MIT License](https://opensource.org/licenses/M
 - [Luis Guilherme](https://github.com/luisgxlauria) - lgals@cesar.school
 - [Joao Lucas](https://github.com/JRobalinho) - jlvrf@cesar.school
 - [Caio Ferreira](https://github.com/CaioLira18) - cflo@cesar.school
+
+
+
+<details>
+<summary><h2>Links</h2></summary>
+
+- [Site - Azure]()
+
+- [Jira - Backlog](https://cesar-team-pkcqpghh.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog)
+
+- [Figma - Prototipo Lo-fi](https://www.figma.com/design/41Ibz8AEwuqGG0PivkYSAL/Prot%C3%B3tipo-baixa-fidelidade?node-id=0-1&node-type=canvas)
+
+</details>
+
+
+<details>
+<summary><h2>SR1</h2></summary>
+
+- [Screencast do Protótipo Lo-fi]()
+
+- [Screencast do Site]()
+
+- [Link do jira da equipe](https://cesar-team-pkcqpghh.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog)
+
+- [Analise_de_Viabilidade_Programacao_em_Par_Projeto_Django.pdf](https://github.com/user-attachments/files/17388785/Analise_de_Viabilidade_Programacao_em_Par_Projeto_Django.pdf)
+
+- **Print Backlog**
+
+![Captura de tela 2024-10-16 001422](https://github.com/user-attachments/assets/85b3fbb5-fec5-48c2-86d3-9d452925157d)
+
+- **Print Issues/Bug Tracker**
+
+![Captura de tela 2024-10-16 001519](https://github.com/user-attachments/assets/1bce1d27-25c7-48f8-ab5f-7672a40192b8)
+
+- **Print Diagrama de Atividades do Projeto**
+
+![image](https://github.com/user-attachments/assets/b5ff5f6b-c16d-4836-bc7e-2cefa89e0790)
+
+</details>
