@@ -16,6 +16,3 @@ db.sqlite3
 # Arquivos de configurações do IDE/editor
 .vscode/
 .idea/
-
-# Arquivos de mídia e uploads (se você estiver armazenando no projeto)
-media/
