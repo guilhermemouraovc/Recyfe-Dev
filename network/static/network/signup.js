@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if(input.classList.contains('cpswd')){
                 if(input.value.trim().length !== 0) {
                     if(input.value !== document.querySelector('.pswd').value) {
-                        input.parentElement.querySelector('span').innerText = "Password must match";
+                        input.parentElement.querySelector('span').innerText = "A senha deve corresponder";
                         check[4] = false;
                     }
                     else {
@@ -63,10 +63,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             else {
                 if(event.target.id == 'profile') {
-                    event.target.parentElement.querySelector('.custom-file-label').innerHTML = `<span style="color: #6c757d;">Choose profile picture<span>`;
+                    event.target.parentElement.querySelector('.custom-file-label').innerHTML = `<span style="color: #6c757d;">Escolha a foto do perfil<span>`;
                 }
                 else if(event.target.id == 'cover') {
-                    event.target.parentElement.querySelector('.custom-file-label').innerHTML = `<span style="color: #6c757d;">Choose cover picture<span>`;
+                    event.target.parentElement.querySelector('.custom-file-label').innerHTML = `<span style="color: #6c757d;">Escolha background<span>`;
                 }
             }
         });

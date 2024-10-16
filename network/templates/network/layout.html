@@ -19,8 +19,8 @@
                     Essa ação não pode ser desfeita, será excluído do seu perfil, da timeline de quem te segue e das buscas da barra de pesquisa
                 </div>
                 <div style="padding: 0px 5%;">
-                    <button class="btn btn-light float-left" onclick="remove_popup()">Cancel</button>
-                    <button class="btn btn-danger float-right" id="delete_post_btn">Delete</button>
+                    <button class="btn btn-light float-left" onclick="remove_popup()">Cancelar</button>
+                    <button class="btn btn-danger float-right" id="delete_post_btn">Deletar</button>
                 </div>
             </div>
             <div class="large-popup">
@@ -83,7 +83,7 @@
                     </div>
                     <div class="btn-div">
                         <button class="btn btn-success btn-block" onclick="goto_register()">Registrar</button>
-                        <button class="btn btn-outline-success btn-block" onclick="goto_login()">Login</button>
+                        <button class="btn btn-outline-success btn-block" onclick="goto_login()">Log In</button>
                     </div>
                 </center>
             </div>
@@ -180,7 +180,7 @@
                             </ul>
                         </div>
                         {% if user.is_authenticated %}
-                            <button id="popup-btn" class="btn btn-success new-post-btn" onclick="createpost()">Create Post</button>
+                            <button id="popup-btn" class="btn btn-success new-post-btn" onclick="createpost()">Criar Post</button>
                         {% endif %}
                     </div>
                     <div style="position: absolute; bottom: 10px;">
@@ -249,7 +249,7 @@
                                         </a>
                                     </div>
                                     <div>
-                                        <button class="btn btn-outline-success" type="button" onclick="follow_user(this,'{{suggestion.username}}','suggestion')">Follow</button>
+                                        <button class="btn btn-outline-success" type="button" onclick="follow_user(this,'{{suggestion.username}}','suggestion')">Seguir</button>
                                     </div>
                                 </div>
                             {% empty %}
