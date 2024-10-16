@@ -75,7 +75,7 @@ Este projeto é licenciado sob a [MIT License](https://opensource.org/licenses/M
 <details>
 <summary><h2>SR1</h2></summary>
 
-- [Screencast do Protótipo Lo-fi]()
+- [Screencast do Protótipo Lo-fi](https://www.youtube.com/watch?v=FWHbXnmOCmE)
 
 - [Screencast do Site]()
 
@@ -83,7 +83,7 @@ Este projeto é licenciado sob a [MIT License](https://opensource.org/licenses/M
 
 - [Analise_de_Viabilidade_Programacao_em_Par_Projeto_Django.pdf](https://github.com/user-attachments/files/17388785/Analise_de_Viabilidade_Programacao_em_Par_Projeto_Django.pdf)
 
-- **Print Backlog**
+- **Print Product Backlog**
 
 ![Captura de tela 2024-10-16 001422](https://github.com/user-attachments/assets/85b3fbb5-fec5-48c2-86d3-9d452925157d)
 
