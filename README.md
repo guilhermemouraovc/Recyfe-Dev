@@ -75,9 +75,9 @@ Este projeto é licenciado sob a [MIT License](https://opensource.org/licenses/M
 <details>
 <summary><h2>SR1</h2></summary>
 
-- [Screencast do Protótipo Lo-fi](https://www.youtube.com/watch?v=FWHbXnmOCmE)
+- [Screecast do Protótipo Lo-fi](https://www.youtube.com/watch?v=FWHbXnmOCmE)
 
-- [Screencast do Site]()
+- [Screecast do Site]()
 
 - [Site - Azure]()
 
