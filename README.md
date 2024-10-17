@@ -65,8 +65,6 @@ Este projeto é licenciado sob a [MIT License](https://opensource.org/licenses/M
 
 - [Site - Azure]()
 
-- [Jira - Backlog](https://cesar-team-pkcqpghh.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog)
-
 - [Figma - Prototipo Lo-fi](https://www.figma.com/design/41Ibz8AEwuqGG0PivkYSAL/Prot%C3%B3tipo-baixa-fidelidade?node-id=0-1&node-type=canvas)
 
 </details>
