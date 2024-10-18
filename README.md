@@ -63,7 +63,7 @@ Este projeto é licenciado sob a [MIT License](https://opensource.org/licenses/M
 <details>
 <summary><h2>Links</h2></summary>
 
-- [Site - Azure]()
+- [Site - Azure](https://recyfe.azurewebsites.net/)
 
 - [Figma - Prototipo Lo-fi](https://www.figma.com/design/41Ibz8AEwuqGG0PivkYSAL/Prot%C3%B3tipo-baixa-fidelidade?node-id=0-1&node-type=canvas)
 
@@ -77,7 +77,7 @@ Este projeto é licenciado sob a [MIT License](https://opensource.org/licenses/M
 
 - [Screecast do Site]()
 
-- [Site - Azure]()
+- [Site - Azure](https://recyfe.azurewebsites.net/)
 
 - [Link do jira da equipe](https://cesar-team-pkcqpghh.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog)
 
