@@ -75,7 +75,7 @@ Este projeto é licenciado sob a [MIT License](https://opensource.org/licenses/M
 
 - [Screecast do Protótipo Lo-fi](https://www.youtube.com/watch?v=FWHbXnmOCmE)
 
-- [Screecast do Site]()
+- [Screecast do Site](https://youtu.be/bEzvsAhCzDU)
 
 - [Site - Azure](https://recyfe.azurewebsites.net/)
 
