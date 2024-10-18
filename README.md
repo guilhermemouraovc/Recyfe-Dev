@@ -79,8 +79,6 @@ Este projeto é licenciado sob a [MIT License](https://opensource.org/licenses/M
 
 - [Site - Azure](https://recyfe.azurewebsites.net/)
 
-- [Link do jira da equipe](https://cesar-team-pkcqpghh.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog)
-
 - [Analise_de_Viabilidade_Programacao_em_Par_Projeto_Django.pdf](https://github.com/user-attachments/files/17388785/Analise_de_Viabilidade_Programacao_em_Par_Projeto_Django.pdf)
 
 - **Print Product Backlog**
