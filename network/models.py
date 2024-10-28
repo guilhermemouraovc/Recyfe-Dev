@@ -27,6 +27,16 @@ class UserCredits(models.Model):
     def __str__(self):
         return f"{self.user.username} - Saldo: {self.saldo} créditos"
 
+class CreditCode(models.Model):
+    codigo = models.CharField(max_length=50, unique=True)
+    saldo = models.PositiveIntegerField(default=100) 
+    utilizado = models.BooleanField(default=False)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    usuario_usado = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.codigo} - {'Usado' if self.utilizado else 'Válido'}"
+
 class Reward(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.TextField()

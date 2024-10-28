@@ -1,15 +1,15 @@
-from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 import json
 
-from .models import *
-
+from .models import User, Post, Comment, Follower, UserCredits, Reward, CreditCode
 
 def index(request):
     all_posts = Post.objects.all().order_by('-date_created')
@@ -67,7 +67,6 @@ def register(request):
         cover = request.FILES.get('cover')
         print(f"--------------------------Cover: {cover}----------------------------")
 
-        # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
@@ -75,7 +74,6 @@ def register(request):
                 "message": "Passwords must match."
             })
 
-        # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
             user.first_name = fname
@@ -369,3 +367,31 @@ def delete_post(request, post_id):
             return HttpResponse("Method must be 'PUT'")
     else:
         return HttpResponseRedirect(reverse('login'))
+    
+@login_required
+def credits_view(request):
+    user_credits = UserCredits.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        codigo_credito = request.POST.get('codigo_credito')
+
+        try:
+            credit_code = CreditCode.objects.get(codigo=codigo_credito, utilizado=False)
+
+            user_credits.saldo += credit_code.saldo
+            user_credits.save()
+
+            credit_code.utilizado = True
+            credit_code.usuario_usado = request.user
+            credit_code.save()
+
+            messages.success(request, "Créditos adicionados com sucesso!")
+        except CreditCode.DoesNotExist:
+            messages.error(request, "Código de crédito inválido ou já utilizado.")
+
+        return redirect('credits')
+
+    context = {
+        'saldo_creditos': user_credits.saldo
+    }
+    return render(request, 'credits.html', context)
