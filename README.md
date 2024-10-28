@@ -630,4 +630,22 @@ Dado que eu não tenha permissões de administrador,
 Quando eu tentar acessar a função de transferência de créditos,
 Então o sistema deve bloquear o acesso e exibir a mensagem "Permissão negada. Apenas administradores podem realizar transferências de créditos."
 
+## Instruções de acesso ao projeto:
+
+## Diagrama de atividades do sistema
+
+## Issues/bug tracker:
+
+- Issues Abertas:
+
+- Issues Fechadas:
+
+## Print do backlog do projeto:
+
+## Print do quadro da Sprint:
+
+## Programacao em Par:
+
+- [Analise_de_Viabilidade_Programacao_em_Par_Projeto_Django.pdf](https://github.com/user-attachments/files/17388785/Analise_de_Viabilidade_Programacao_em_Par_Projeto_Django.pdf)
+
 </details>
