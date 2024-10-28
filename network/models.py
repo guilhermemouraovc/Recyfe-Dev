@@ -19,6 +19,22 @@ class User(AbstractUser):
             "first_name": self.first_name,
             "last_name": self.last_name
         }
+    
+class UserCredits(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="credits")
+    saldo = models.PositiveIntegerField(default=0) 
+
+    def __str__(self):
+        return f"{self.user.username} - Saldo: {self.saldo} créditos"
+
+class Reward(models.Model):
+    nome = models.CharField(max_length=100)
+    descricao = models.TextField()
+    valor_em_creditos = models.PositiveIntegerField()  
+    imagem = models.ImageField(upload_to='recompensas/') 
+
+    def __str__(self):
+        return f"{self.nome} - {self.valor_em_creditos} créditos"
 
 class Post(models.Model):
     creater = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
@@ -61,4 +77,6 @@ class Follower(models.Model):
 
     def __str__(self):
         return f"User: {self.user}"
+    
+
         
