@@ -641,7 +641,7 @@ Então o sistema deve bloquear o acesso e exibir a mensagem "Permissão negada. 
 
 - Issues Fechadas:
 
-## Print dos quadros da Sprints:
+## Print dos quadros da Sprints/Backlog:
 
 ![Captura de tela 2024-10-28 142443](https://github.com/user-attachments/assets/d7b6c565-2ce1-4bf0-b3d5-ac42b9a769d0)
 
