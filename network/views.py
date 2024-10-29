@@ -181,7 +181,7 @@ def credits_view(request):
             messages.success(request, f"Você recebeu {code.credits} créditos!")
         except RedeemCode.DoesNotExist:
             messages.error(request, "Código inválido ou já resgatado.")
-    return render(request, "credits.html", {"credits": user.credits})
+    return render(request, "network/credits.html", {"credits": user.credits})
 
 @login_required
 def create_post(request):
