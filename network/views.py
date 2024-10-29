@@ -1,15 +1,14 @@
+import json
+from .models import *
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.core.paginator import Paginator
-import json
-
-from .models import *
-
 
 def index(request):
     all_posts = Post.objects.all().order_by('-date_created')
@@ -168,7 +167,21 @@ def saved(request):
     else:
         return HttpResponseRedirect(reverse('login'))
         
-
+@login_required
+def credits_view(request):
+    user = request.user
+    if request.method == "POST":
+        code_input = request.POST.get("redeem_code")
+        try:
+            code = RedeemCode.objects.get(code=code_input, is_redeemed=False)
+            user.credits += code.credits
+            user.save()
+            code.is_redeemed = True
+            code.save()
+            messages.success(request, f"Você recebeu {code.credits} créditos!")
+        except RedeemCode.DoesNotExist:
+            messages.error(request, "Código inválido ou já resgatado.")
+    return render(request, "credits.html", {"credits": user.credits})
 
 @login_required
 def create_post(request):

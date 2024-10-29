@@ -1,12 +1,14 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
+import uuid
 
 
 class User(AbstractUser):
     profile_pic = models.ImageField(upload_to='profile_pic/')
     bio = models.TextField(max_length=160, blank=True, null=True)
     cover = models.ImageField(upload_to='covers/', blank=True)
+    credits = models.IntegerField(default=0)
 
     def __str__(self):
         return self.username
@@ -17,8 +19,17 @@ class User(AbstractUser):
             "username": self.username,
             "profile_pic": self.profile_pic.url,
             "first_name": self.first_name,
-            "last_name": self.last_name
+            "last_name": self.last_name,
+            "credits": self.credits,
         }
+
+class RedeemCode(models.Model):
+    code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    credits = models.IntegerField()
+    is_redeemed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Código: {self.code} - Créditos: {self.credits}"
 
 class Post(models.Model):
     creater = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
@@ -52,7 +63,7 @@ class Comment(models.Model):
             "id": self.id,
             "commenter": self.commenter.serialize(),
             "body": self.comment_content,
-            "timestamp": self.comment_time.strftime("%b %d %Y, %I:%M %p")
+            "timestamp": self.comment_time.strftime("%b %d %Y, %I:%M %p"),
         }
     
 class Follower(models.Model):
