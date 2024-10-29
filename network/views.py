@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -33,12 +33,10 @@ def index(request):
 def login_view(request):
     if request.method == "POST":
 
-        # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
 
-        # Check if authentication successful
         if user is not None:
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
@@ -66,7 +64,6 @@ def register(request):
         cover = request.FILES.get('cover')
         print(f"--------------------------Cover: {cover}----------------------------")
 
-        # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
@@ -74,7 +71,6 @@ def register(request):
                 "message": "Passwords must match."
             })
 
-        # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
             user.first_name = fname
@@ -98,25 +94,29 @@ def register(request):
 
 
 def profile(request, username):
-    user = User.objects.get(username=username)
+    user = get_object_or_404(User, username=username)
     all_posts = Post.objects.filter(creater=user).order_by('-date_created')
     paginator = Paginator(all_posts, 10)
-    page_number = request.GET.get('page')
-    if page_number == None:
-        page_number = 1
+    page_number = request.GET.get('page', 1) 
     posts = paginator.get_page(page_number)
+
     followings = []
     suggestions = []
     follower = False
+
     if request.user.is_authenticated:
         followings = Follower.objects.filter(followers=request.user).values_list('user', flat=True)
         suggestions = User.objects.exclude(pk__in=followings).exclude(username=request.user.username).order_by("?")[:6]
 
-        if request.user in Follower.objects.get(user=user).followers.all():
+        follower_instance = Follower.objects.filter(user=user).first()
+        if follower_instance and request.user in follower_instance.followers.all():
             follower = True
     
-    follower_count = Follower.objects.get(user=user).followers.all().count()
+    follower_count = Follower.objects.filter(user=user).first()
+    follower_count = follower_count.followers.count() if follower_count else 0
+    
     following_count = Follower.objects.filter(followers=user).count()
+
     return render(request, 'network/profile.html', {
         "username": user,
         "posts": posts,
