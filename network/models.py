@@ -21,7 +21,7 @@ class User(AbstractUser):
         }
     
 class UserCredits(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user_credits")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="credits")
     saldo = models.PositiveIntegerField(default=0) 
 
     def __str__(self):
