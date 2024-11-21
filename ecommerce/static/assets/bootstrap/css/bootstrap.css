@@ -2983,6 +2983,76 @@ input[type="button"].btn-block {
   content: "";
   background: no-repeat center center;
   background-size: 100% 100%; }
+  .navbar-custom {
+    background-color: #4472a6; /* Escolha a cor desejada */
+}
+
+.botaoMenu {
+    background-color: transparent; /* Remove o fundo */
+    border: none;                 /* Remove a borda */
+    cursor: pointer;              /* Adiciona o cursor de pointer ao passar o mouse */
+    padding: 0;                   /* Remove espaçamentos extras */
+}
+
+.botaoMenu img {
+    display: block;               /* Remove margens em volta da imagem */
+}
+
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    background-color: #f8f9fa;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidebar-content {
+    padding: 20px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar ul li a:hover {
+    color: #007bff;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 30px;
+    background: none;
+    border: none;
+    color: #333;
+}
+
+.dropdown-menu {
+    display: none;
+    padding-left: 20px;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
 
 @media (max-width: 575.98px) {
   .navbar-expand-sm > .container,
