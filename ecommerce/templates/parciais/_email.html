@@ -1,0 +1,33 @@
+{% load static %}
+{% load omfilters %}
+
+<h2>Detalhes do Pedido #{{ pedido.id }}</h2>
+
+<p>Olá {{ pedido.usuario.first_name }},</p>
+
+<p>Segue abaixo os detalhes do seu pedido:</p>
+
+<div style="margin: 20px 0;">
+    {% for item in itens %}
+    <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 5px;">
+        <div style="display: flex; align-items: start;">
+            <div style="margin-right: 15px;">
+                <img src="{{ item.imagem_url }}" alt="{{ item.produto }}" style="max-width: 100px; height: auto;">
+            </div>
+            <div style="flex: 1;">
+                <h3 style="margin: 0 0 10px 0;">{{ item.produto }}</h3>
+                <p style="margin: 5px 0;">Variação: {{ item.variacao }}</p>
+                <p style="margin: 5px 0;">Quantidade: {{ item.quantidade }}</p>
+                <p style="margin: 5px 0; font-weight: bold;">Preço Total: R$ {{ item.total|formata_preco }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div style="text-align: right; margin-top: 20px; padding: 15px; background-color: #f8f9fa;">
+    <h3 style="margin: 0;">Total do Pedido: R$ {{ pedido.total|formata_preco }}</h3>
+</div>
+
+<p style="margin-top: 20px;">Realizar o Pagamento Via WhatsApp!</p>
+<p style="margin-top: 20px;">Obrigado por comprar conosco!</p>

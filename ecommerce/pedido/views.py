@@ -1,15 +1,18 @@
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, reverse
 from django.views.generic import ListView, DetailView
 from django.views import View
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.sites.shortcuts import get_current_site
 from ecommerce.produto.models import Variacao
 from .models import Pedido, ItemPedido
 from ecommerce.utils import utils
-from network.models import User
-from .models import models
-
-usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name="pedidos")
+import json
 
 class DispatchLoginRequiredMixin(View):
     def dispatch(self, *args, **kwargs):
@@ -22,42 +25,25 @@ class DispatchLoginRequiredMixin(View):
         qs = qs.filter(usuario=self.request.user)
         return qs
 
-
-class Pagar(DispatchLoginRequiredMixin, DetailView):
-    template_name = 'pedido/pagar.html'
-    model = Pedido
-    pk_url_kwarg = 'pk'
-    context_object_name = 'pedido'
-
-
 class SalvarPedido(View):
     template_name = 'pedido/pagar.html'
 
     def get(self, *args, **kwargs):
         if not self.request.user.is_authenticated:
-            messages.error(
-                self.request,
-                'Você precisa fazer login.'
-            )
+            messages.error(self.request, 'Você precisa fazer login.')
             return redirect('register')
 
-        # Verificar se o carrinho está na sessão
         carrinho = self.request.session.get('carrinho')
         if not carrinho:
-            messages.error(
-                self.request,
-                'Seu carrinho está vazio.'
-            )
+            messages.error(self.request, 'Seu carrinho está vazio.')
             return redirect('produto:lista')
 
-        # Obter as variações do carrinho
         carrinho_variacao_ids = [v for v in carrinho]
         bd_variacoes = list(
             Variacao.objects.select_related('produto')
             .filter(id__in=carrinho_variacao_ids)
         )
 
-        # Verificar o estoque
         for variacao in bd_variacoes:
             vid = str(variacao.id)
             estoque = variacao.estoque
@@ -72,18 +58,14 @@ class SalvarPedido(View):
 
                 messages.error(
                     self.request,
-                    'Estoque insuficiente para alguns produtos do seu carrinho. '
-                    'Reduzimos a quantidade desses produtos. Por favor, verifique.'
+                    'Estoque insuficiente para alguns produtos. Quantidades ajustadas.'
                 )
-
                 self.request.session.save()
                 return redirect('produto:carrinho')
 
-        # Calcular o total e a quantidade do carrinho
         qtd_total_carrinho = utils.cart_total_qtd(carrinho)
         valor_total_carrinho = utils.cart_totals(carrinho)
 
-        # Criar o pedido e associá-lo ao usuário
         pedido = Pedido(
             usuario=self.request.user,
             total=valor_total_carrinho,
@@ -92,9 +74,9 @@ class SalvarPedido(View):
         )
         pedido.save()
 
-        # Criar os itens do pedido em massa
-        ItemPedido.objects.bulk_create([
-            ItemPedido(
+        itens_pedido = []
+        for v in carrinho.values():
+            item_pedido = ItemPedido(
                 pedido=pedido,
                 produto=v['produto_nome'],
                 produto_id=v['produto_id'],
@@ -104,13 +86,53 @@ class SalvarPedido(View):
                 preco_promocional=v['preco_quantitativo_promocional'],
                 quantidade=v['quantidade'],
                 imagem=v['imagem'],
-            ) for v in carrinho.values()
-        ])
+            )
+            itens_pedido.append(item_pedido)
 
-        # Limpar o carrinho
+        ItemPedido.objects.bulk_create(itens_pedido)
+
+        # Obter o domínio do site atual
+        current_site = get_current_site(self.request)
+        domain = current_site.domain
+        protocol = 'https' if self.request.is_secure() else 'http'
+        
+        # Preparar itens para o email com URLs absolutas
+        itens_email = []
+        for item in itens_pedido:
+            # Já que item.imagem é uma string, usamos diretamente
+            imagem_url = item.imagem
+            if imagem_url and not imagem_url.startswith(('http://', 'https://')):
+                imagem_url = f'{protocol}://{domain}{imagem_url}'
+
+            item_dict = {
+                'produto': item.produto,
+                'variacao': item.variacao,
+                'quantidade': item.quantidade,
+                'total': item.preco_promocional if item.preco_promocional else item.preco,
+                'imagem_url': imagem_url,  # URL absoluta da imagem
+            }
+            itens_email.append(item_dict)
+
+        contexto_email = {
+            'pedido': pedido,
+            'itens': itens_email,
+        }
+
+        mensagem_html = render_to_string(
+            'parciais/_email.html',
+            contexto_email
+        )
+
+        send_mail(
+            subject=f'Confirmação do Pedido #{pedido.id}',
+            message='',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[self.request.user.email],
+            fail_silently=False,
+            html_message=mensagem_html
+        )
+
         del self.request.session['carrinho']
-
-        # Redirecionar para a página de pagamento
         return redirect(
             reverse(
                 'pedido:pagar',
@@ -118,13 +140,17 @@ class SalvarPedido(View):
             )
         )
 
+class Pagar(DispatchLoginRequiredMixin, DetailView):
+    template_name = 'pedido/pagar.html'
+    model = Pedido
+    pk_url_kwarg = 'pk'
+    context_object_name = 'pedido'
 
 class Detalhe(DispatchLoginRequiredMixin, DetailView):
     model = Pedido
     context_object_name = 'pedido'
     template_name = 'pedido/detalhe.html'
     pk_url_kwarg = 'pk'
-
 
 class Lista(DispatchLoginRequiredMixin, ListView):
     model = Pedido

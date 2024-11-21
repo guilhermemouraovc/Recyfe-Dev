@@ -15,6 +15,8 @@ urlpatterns = [
     path('produto/', include('ecommerce.produto.urls')), 
     path("n/login", views.login_view, name="login"),
     path("n/logout", views.logout_view, name="logout"),
+    path("n/email", views.email, name="email"),
+    path('enviar_email_pedido/', views.enviar_email_pedido, name='enviar_email_pedido'),
     path("n/register", views.register, name="register"),
     path("<str:username>", views.profile, name='profile'),
     path("n/following", views.following, name='following'),

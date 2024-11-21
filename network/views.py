@@ -7,12 +7,24 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+
+
+
+
+
+
 import json
 
 from .models import User, Post, Comment, Follower, UserCredits, Reward, CreditCode
+from ecommerce.pedido.models import Pedido, ItemPedido
 
-
-
+    
 def index(request):
     all_posts = Post.objects.all().order_by('-date_created')
     paginator = Paginator(all_posts, 10)
@@ -96,7 +108,8 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
-
+def email(request):
+    return render(request, 'parciais/_email.html')
 
 def profile(request, username):
     user = User.objects.get(username=username)
@@ -168,7 +181,109 @@ def saved(request):
     else:
         return HttpResponseRedirect(reverse('login'))
         
+@csrf_exempt
+def enviar_email_pedido(request):
+    """
+    View para processar o envio de email com detalhes do pedido.
+    Aceita requisições POST com dados do pedido em JSON.
+    """
+    if request.method != 'POST':
+        return JsonResponse({
+            'status': 'erro',
+            'mensagem': 'Método inválido.'
+        })
 
+    try:
+        # Processa os dados da requisição
+        dados = json.loads(request.body)
+        pedido_id = dados.get('pedido_id')
+        total = dados.get('total')
+        itens = dados.get('itens', [])
+        usuario = request.user
+
+        def limpar_valor(valor):
+            """Converte strings de valor monetário para float."""
+            return float(valor.replace('R$', '').replace(' ', '').replace(',', '.'))
+
+        # Processa o valor total
+        try:
+            total = limpar_valor(total)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'erro',
+                'mensagem': f'Erro ao processar o total: {str(e)}'
+            })
+
+        # Valida a estrutura dos itens
+        if not isinstance(itens, list):
+            return JsonResponse({
+                'status': 'erro',
+                'mensagem': 'Itens não são uma lista válida.'
+            })
+
+        # Processa cada item do pedido
+        for item in itens:
+            if not isinstance(item, dict):
+                return JsonResponse({
+                    'status': 'erro',
+                    'mensagem': f'O item {item} não é um dicionário válido.'
+                })
+
+            if 'total' not in item:
+                return JsonResponse({
+                    'status': 'erro',
+                    'mensagem': f'O item {item} não contém a chave "total".'
+                })
+
+            try:
+                item['total'] = limpar_valor(item['total'])
+            except Exception as e:
+                return JsonResponse({
+                    'status': 'erro',
+                    'mensagem': f'Erro ao processar item {item.get("produto", "desconhecido")}: {str(e)}'
+                })
+
+        # Prepara os dados para o template
+        pedido = {
+            'id': pedido_id,
+            'total': total,
+            'usuario': usuario,
+        }
+
+        # Renderiza o template do email
+        mensagem_html = render_to_string(
+            'parciais/_email.html',
+            {
+                'pedido': pedido,
+                'itens': itens
+            }
+        )
+
+        # Envia o email
+        send_mail(
+            subject='Detalhes do Pedido',
+            message='',  # Corpo em texto simples
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[request.user.email],
+            fail_silently=False,
+            html_message=mensagem_html
+        )
+
+        return JsonResponse({
+            'status': 'sucesso',
+            'mensagem': 'E-mail enviado com sucesso!'
+        })
+
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'status': 'erro',
+            'mensagem': 'Erro ao processar os dados do pedido. Formato JSON inválido.'
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'erro',
+            'mensagem': f'Erro inesperado: {str(e)}'
+        })
 
 @login_required
 def create_post(request):

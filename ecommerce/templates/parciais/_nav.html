@@ -102,20 +102,22 @@
         const dropdownMenu = element.nextElementSibling;
         dropdownMenu.classList.toggle('show');
     }
+    
 </script>
+
 
 <nav class="navbar navbar-dark navbar-custom navbar-expand-lg">
     <button class="botaoMenu" onclick="toggleSidebar()">
         <img src="{% static 'network/Images/menu_icon.png' %}" height="30px" alt="Logo Icon">
     </button>
     
-    <a class="navbar-brand" href="{% url 'index'  %}"><img src="/media/logo_white.jpg" alt="Logo da Recyfe" width=300px></a>
+    <a class="navbar-brand" href="{% url 'index'  %}"><img src="{% static 'network/Images/logo_recyfe.png' %}" alt="Logo da Recyfe" width=300px></a>
     
     
 
    <div id="menuOptions" class="sidenav" style="display: none;">
     <a href="{% url 'index' %}" class="navbar-brand">
-        <img src="{% static 'network/Images/logo-transparent.png' %}" height="50px">
+        <img src="{% static 'network/Images/logo_icon.png' %}" height="50px">
     </a>
     <ul>
         <li class="nav-item" id="all_posts">
