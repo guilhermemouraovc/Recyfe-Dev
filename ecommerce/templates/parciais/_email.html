@@ -3,8 +3,6 @@
 {% load omfilters %}
 {% load static %}
 
-
-
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -18,6 +16,7 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #f8f9fa;
         }
         .header {
             text-align: center;
@@ -30,12 +29,14 @@
         }
         .saudacao {
             margin-bottom: 20px;
+            color: #555;
         }
         .item-pedido {
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 15px;
+            background-color: #fff;
         }
         .item-container {
             display: flex;
@@ -62,12 +63,13 @@
         }
         .item-detalhe {
             margin: 5px 0;
+            color: #555;
         }
         .total-pedido {
             text-align: right;
             margin-top: 20px;
             padding: 15px;
-            background-color: #f8f9fa;
+            background-color: #e9ecef;
             border-radius: 8px;
         }
         .total-valor {
@@ -81,6 +83,7 @@
             text-align: center;
             padding-top: 20px;
             border-top: 1px solid #eee;
+            color: #555;
         }
         @media only screen and (max-width: 480px) {
             .item-container {
@@ -94,11 +97,12 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <h1 class="pedido-numero">Detalhes do Pedido #{{ pedido.id }}</h1>
-        <p>Olá {{ pedido.usuario.first_name }},</p>
         <div class="saudacao">
+            Olá {{ pedido.usuario.first_name }},<br>
             Segue abaixo os detalhes do seu pedido:
         </div>
     </div>
@@ -107,6 +111,10 @@
         {% for item in itens %}
         <div class="item-pedido">
             <div class="item-container">
+                <div class="item-imagem">
+                    <p>Imagem URL: {{item.imagem}}</p>
+                    <img src="{{item.imagem}}" alt="{{ item.produto }}" style="width: 100%; height: auto; border-radius: 4px;">
+                </div>
                 <div class="item-info">
                     <h3 class="item-nome">{{ item.produto }}</h3>
                     <div class="item-detalhe">

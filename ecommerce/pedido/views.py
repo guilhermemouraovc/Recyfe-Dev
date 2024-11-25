@@ -13,6 +13,9 @@ from ecommerce.produto.models import Variacao
 from .models import Pedido, ItemPedido
 from ecommerce.utils import utils
 import json
+from django.conf import settings
+import os
+
 
 class DispatchLoginRequiredMixin(View):
     def dispatch(self, *args, **kwargs):
@@ -99,10 +102,7 @@ class SalvarPedido(View):
         # Preparar itens para o email com URLs absolutas
         itens_email = []
         for item in itens_pedido:
-            # Já que item.imagem é uma string, usamos diretamente
-            imagem_url = item.imagem
-            if imagem_url and not imagem_url.startswith(('http://', 'https://')):
-                imagem_url = f'{protocol}://{domain}{imagem_url}'
+            imagem_url = item.imagem  # URL atual ou caminho da imagem
 
             item_dict = {
                 'produto': item.produto,

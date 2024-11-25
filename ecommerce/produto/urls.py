@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.urls import path
 from . import views
+from django.conf.urls.static import static
 
 
 app_name = 'produto'
@@ -15,3 +17,6 @@ urlpatterns = [
     path('resumodacompra/', views.ResumoDaCompra.as_view(), name="resumodacompra"),
     path('busca/', views.Busca.as_view(), name="busca"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
