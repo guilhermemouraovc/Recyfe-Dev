@@ -85,16 +85,6 @@
             border-top: 1px solid #eee;
             color: #555;
         }
-        @media only screen and (max-width: 480px) {
-            .item-container {
-                flex-direction: column;
-            }
-            .item-imagem {
-                width: 100%;
-                max-width: 200px;
-                margin: 0 auto 15px;
-            }
-        }
     </style>
 </head>
 
@@ -111,10 +101,6 @@
         {% for item in itens %}
         <div class="item-pedido">
             <div class="item-container">
-                <div class="item-imagem">
-                    <p>Imagem URL: {{item.imagem}}</p>
-                    <img src="{{item.imagem}}" alt="{{ item.produto }}" style="width: 100%; height: auto; border-radius: 4px;">
-                </div>
                 <div class="item-info">
                     <h3 class="item-nome">{{ item.produto }}</h3>
                     <div class="item-detalhe">
