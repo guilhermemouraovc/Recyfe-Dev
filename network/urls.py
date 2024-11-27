@@ -9,6 +9,7 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path('n/mapa/', views.map_view, name='mapa'),
     path("loja/", include('ecommerce.loja.urls')),  
     path('pedido/', include('ecommerce.pedido.urls', namespace="pedido")), 
     path('perfil/', include('ecommerce.perfil.urls')),  

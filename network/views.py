@@ -14,14 +14,9 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
-
-
-
-
-
 import json
 
-from .models import User, Post, Comment, Follower, UserCredits, Reward, CreditCode
+from .models import User, Post, Comment, Follower, UserCredits, Reward, CreditCode, MapPoint
 from ecommerce.pedido.models import Pedido, ItemPedido
 
     
@@ -571,3 +566,17 @@ def credits_view(request):
         'saldo_creditos': user_credits.saldo
     }
     return render(request, 'credits.html', context)
+
+def map_view(request):
+    points = MapPoint.objects.all()
+    # Serializando os pontos para JSON
+    points_data = [
+        {
+            "name": point.name,
+            "description": point.description,
+            "latitude": point.latitude,
+            "longitude": point.longitude,
+        }
+        for point in points
+    ]
+    return render(request, 'map.html', {'points': json.dumps(points_data)})

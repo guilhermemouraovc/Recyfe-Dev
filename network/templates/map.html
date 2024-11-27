@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 500px; /* Define a altura do mapa */
+            width: 1000px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        // Inicializando o mapa
+        var map = L.map('map').setView([-8.0476, -34.8770], 13); // Coordenadas de Recife
+
+        // Adicionando a camada de mapa do OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Pontos enviados pelo Django
+        var points = {{ points|safe }}; // Recebendo os dados do Django no contexto
+        
+        // Iterando sobre os pontos e adicionando marcadores ao mapa
+        points.forEach(function(point) {
+            L.marker([point.latitude, point.longitude])
+                .addTo(map)
+                .bindPopup(`<b>${point.name}</b><br>${point.description}`);
+        });
+    </script>
+</body>
+</html>

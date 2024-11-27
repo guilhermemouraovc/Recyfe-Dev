@@ -10,3 +10,7 @@ admin.site.register(Comment)
 admin.site.register(Follower)
 #admin.site.register(Like)
 #admin.site.register(Saved)
+admin.site.register(MapPoint)
+class MapPointAdmin(admin.ModelAdmin):
+    list_display = ('name', 'latitude', 'longitude', 'description')
+    search_fields = ('name', 'description')

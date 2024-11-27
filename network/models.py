@@ -89,4 +89,11 @@ class Follower(models.Model):
         return f"User: {self.user}"
     
 
-        
+class MapPoint(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Nome do Ponto")
+    description = models.TextField(blank=True, verbose_name="Descrição")
+    latitude = models.FloatField(verbose_name="Latitude")
+    longitude = models.FloatField(verbose_name="Longitude")
+    
+    def __str__(self):
+        return f"{self.name} ({self.latitude}, {self.longitude})"
