@@ -1,40 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa</title>
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <style>
-        #map {
-            height: 500px; /* Define a altura do mapa */
-            width: 1000px;
-        }
-    </style>
-</head>
-<body>
-    <div id="map"></div>
-    <script>
-        // Inicializando o mapa
-        var map = L.map('map').setView([-8.0476, -34.8770], 13); // Coordenadas de Recife
+{% extends "network/layout.html" %}
 
-        // Adicionando a camada de mapa do OpenStreetMap
+{% block title %}Mapa{% endblock %}
+
+{% block body %}
+<div id="map"></div>
+
+<!-- Incluindo o CSS do Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+    #map {
+        height: 695px; /* Altura do mapa */
+        width: 1200px; /* Largura total */
+        margin: 0 auto 0 335px; /* Centralizar o mapa com deslocamento para a esquerda */
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Inicializando o mapa com coordenadas centrais (Recife)
+        var map = L.map('map').setView([-8.0476, -34.8770], 13);
+
+        // Adicionando camada do OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        // Pontos enviados pelo Django
-        var points = {{ points|safe }}; // Recebendo os dados do Django no contexto
-        
-        // Iterando sobre os pontos e adicionando marcadores ao mapa
+        // Pontos enviados pelo Django no contexto
+        var points = {{ points|safe }};
+
+        // Adicionando marcadores para cada ponto
         points.forEach(function(point) {
             L.marker([point.latitude, point.longitude])
                 .addTo(map)
                 .bindPopup(`<b>${point.name}</b><br>${point.description}`);
         });
-    </script>
-</body>
-</html>
+    });
+</script>
+{% endblock %}
