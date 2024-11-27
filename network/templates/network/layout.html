@@ -176,7 +176,9 @@
                         {% if user.is_authenticated %}
                         
                             <button id="popup-btn" class="btn btn-success new-post-btn" onclick="createpost()">Criar Post</button>
-                            
+                            <a href="/admin/" class="btn btn-success new-post-btn" role="button" style="margin-top: 10px;">
+                                Admin
+                            </a>
                         {% endif %}
                     </div>
                     <div style="position: absolute; bottom: 10px;">
