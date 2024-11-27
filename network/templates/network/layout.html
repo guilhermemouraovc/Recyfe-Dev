@@ -11,6 +11,21 @@
         {% endblock %}
     </head>
     <body>
+        <style> 
+            .sidenav ul .nav-item img {
+                transition: filter 0.3s; /* Adiciona uma transição suave para o ícone */
+            }
+            
+            .sidenav ul .nav-item:hover img {
+                filter: brightness(0) saturate(100%) invert(50%) sepia(70%) saturate(600%) hue-rotate(85deg) brightness(90%) contrast(85%);
+                /* Torna o ícone verde ao passar o mouse */
+            }
+            
+            .sidenav ul .nav-item:hover .nav-link {
+                color: #28a745; /* Torna o texto verde ao passar o mouse */
+            }
+            
+        </style>
 
         <div class="popup">
             <div class="small-popup">

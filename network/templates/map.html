@@ -66,12 +66,7 @@
             color: #28a745;
         }
 
-        .sidebar .nav-link.active {
-            background-color: #eaf7e6;
-            color: #3a9d23;
-            font-weight: bold;
-            border-radius: 5px;
-        }
+        
 
         .sidebar .nav-link div {
             display: flex;
@@ -82,18 +77,17 @@
             margin-right: 10px;
         }
 
-        .sidebar ul .nav-item.active {
-            color: #28a745 !important;
-            background-color: #e0f2e9;
-            border-radius: 15px;
+        .sidebar ul .nav-item img {
+            transition: filter 0.3s; /* Adiciona uma transição suave para o ícone */
         }
-
-        .sidebar ul .nav-item.active img {
+        
+        .sidebar ul .nav-item:hover img {
             filter: brightness(0) saturate(100%) invert(50%) sepia(70%) saturate(600%) hue-rotate(85deg) brightness(90%) contrast(85%);
+            /* Torna o ícone verde ao passar o mouse */
         }
-
-        .sidebar ul .nav-item.active div {
-            color: #28a745 !important;
+        
+        .sidebar ul .nav-item:hover .nav-link {
+            color: #28a745; /* Torna o texto verde ao passar o mouse */
         }
 
         #map {
