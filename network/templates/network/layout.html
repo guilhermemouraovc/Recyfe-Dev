@@ -110,7 +110,7 @@
                                         <a href="{% url 'saved' %}" class="nav-link">
                                             <div>
                                                 <img src="/media/favoritos.png" alt="People Icon" width="24px"/>
-                                                &nbsp;&nbsp;Salvo
+                                                &nbsp;&nbsp;Favoritos
                                             </div>
                                         </a>
                                     </li>
@@ -174,12 +174,11 @@
                             </ul>
                         </div>
                         {% if user.is_authenticated %}
-                        
-                            <button id="popup-btn" class="btn btn-success new-post-btn" onclick="createpost()">Criar Post</button>
-                            <a href="/admin/" class="btn btn-success new-post-btn" role="button" style="margin-top: 10px;">
-                                Admin
-                            </a>
+                            <button id="popup-btn" class="btn btn-success new-post-btn d-block mb-2" onclick="createpost()">Criar Post</button>
+                            <button id="popup-btn" class="btn btn-success new-post-btn d-block" onclick="window.location.href='/admin/'">Admin</button>
                         {% endif %}
+
+                        
                     </div>
                     <div style="position: absolute; bottom: 10px;">
                         {% if user.is_authenticated %}    
