@@ -1,0 +1,17 @@
+<!-- ecommerce/perfil/templates/criar_oferta.html -->
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Criar Nova Oferta</h2>
+  
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    {{ form.as_p }}  <!-- This will render the form fields as paragraphs -->
+    
+    <button type="submit">Criar Oferta</button>
+  </form>
+  
+  <br>
+  <a href="{% url 'rewards' %}">Voltar para as Ofertas</a>
+{% endblock %}

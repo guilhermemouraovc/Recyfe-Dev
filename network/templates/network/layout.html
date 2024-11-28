@@ -223,6 +223,7 @@
                                             </div>
                                         </a>
                                     </li>
+                                    
                                 {% else %}
                                     <li class="nav-item" id="login">
                                         <a href="{% url 'login' %}" class="nav-link">
@@ -305,6 +306,17 @@
                                                                     <div>
                                                                         <img src="/media/favoritos.png" alt="People Icon" width="24px" />
                                                                         &nbsp;&nbsp;Favoritos
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item" id="logout">
+                                                                <a href="{% url 'rewards' %}" class="nav-link">
+                                                                    <div>
+                                                                        <div>
+                                                                            <img src="/media/credits.png" alt="People Icon" width="24px" />
+                                                                            &nbsp;&nbsp;Rewards
+                                                                        </div>
+                                    
                                                                     </div>
                                                                 </a>
                                                             </li>

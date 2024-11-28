@@ -6,3 +6,5 @@ class VariacaoObrigatoria(BaseInlineFormSet):
         form = super(VariacaoObrigatoria, self)._construct_form(i, **kwargs)
         form.empty_permitted = False
         return form
+    
+

@@ -6,10 +6,14 @@ from django.core.mail import EmailMessage, send_mail
 from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+
+from network.forms import RewardForm
+from .models import Reward
+
 
 import json
 
@@ -541,3 +545,47 @@ def map_view(request):
         for point in points
     ]
     return render(request, 'map.html', {'points': json.dumps(points_data)})
+
+def rewards(request):
+    return render(request, 'network/rewards.html' )
+
+@login_required
+def resgatar_oferta(request):
+    if request.method == "POST":
+        oferta_id = request.POST.get("oferta_id")
+        oferta = get_object_or_404(Reward, id=oferta_id)
+
+        # Obter saldo do usuário
+        user_credits, _ = UserCredits.objects.get_or_create(user=request.user)
+
+        if user_credits.saldo >= oferta.valor_em_creditos:
+            # Descontar crédito
+            user_credits.saldo -= oferta.valor_em_creditos
+            user_credits.save()
+
+            # Registre o resgate (implemente esta lógica conforme necessário)
+            # Por exemplo: criar uma relação entre usuário e oferta resgatada
+
+            messages.success(request, f"Oferta '{oferta.nome}' resgatada com sucesso!")
+        else:
+            messages.error(request, "Saldo insuficiente para resgatar esta oferta.")
+
+        return HttpResponseRedirect(reverse("rewards"))
+    
+    return JsonResponse({"error": "Método inválido."}, status=400)
+
+@login_required
+def criar_oferta(request):
+    if request.method == "POST":
+        form = RewardForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('rewards')  # Redireciona para a página de ofertas
+    else:
+        form = RewardForm()
+    return render(request, "criar_oferta.html", {"form": form})
+
+def rewards(request):
+    ofertas = Reward.objects.all()
+    saldo = UserCredits.objects.get(user=request.user).saldo
+    return render(request, "rewards.html", {"ofertas": ofertas, "saldo": saldo})
