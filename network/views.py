@@ -1,18 +1,15 @@
-from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import EmailMessage, send_mail
 from django.core.paginator import Paginator
-from django.core.mail import EmailMessage
+from django.db import IntegrityError
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-from django.core.mail import send_mail
-from django.conf import settings
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
 
 import json
 
@@ -479,34 +476,6 @@ def delete_post(request, post_id):
             return HttpResponse("Method must be 'PUT'")
     else:
         return HttpResponseRedirect(reverse('login'))
-    
-@login_required
-def credits_view(request):
-    user_credits = UserCredits.objects.get(user=request.user)
-
-    if request.method == 'POST':
-        codigo_credito = request.POST.get('codigo_credito')
-
-        try:
-            credit_code = CreditCode.objects.get(codigo=codigo_credito, utilizado=False)
-
-            user_credits.saldo += credit_code.saldo
-            user_credits.save()
-
-            credit_code.utilizado = True
-            credit_code.usuario_usado = request.user
-            credit_code.save()
-
-            messages.success(request, "Créditos adicionados com sucesso!")
-        except CreditCode.DoesNotExist:
-            messages.error(request, "Código de crédito inválido ou já utilizado.")
-
-        return redirect('credits')
-
-    context = {
-        'saldo_creditos': user_credits.saldo
-    }
-    return render(request, 'credits.html', context)
 
 @login_required
 def edit_profile(request):
@@ -541,35 +510,27 @@ def edit_profile(request):
     
 @login_required
 def credits_view(request):
-    user_credits = UserCredits.objects.get(user=request.user)
+    user_credits, _ = UserCredits.objects.get_or_create(user=request.user)
 
-    if request.method == 'POST':
-        codigo_credito = request.POST.get('codigo_credito')
-
+    if request.method == "POST":
+        code = request.POST.get("credit_code", "").strip()
         try:
-            credit_code = CreditCode.objects.get(codigo=codigo_credito, utilizado=False)
-
-            user_credits.saldo += credit_code.saldo
-            user_credits.save()
-
-            credit_code.utilizado = True
-            credit_code.usuario_usado = request.user
-            credit_code.save()
-
-            messages.success(request, "Créditos adicionados com sucesso!")
+            credit_code = CreditCode.objects.get(codigo=code)
+            if credit_code.utilizado:
+                messages.error(request, "Este código já foi utilizado.")
+            else:
+                credit_code.redeem(request.user)  
+                messages.success(request, f"{credit_code.saldo} créditos adicionados!")
         except CreditCode.DoesNotExist:
-            messages.error(request, "Código de crédito inválido ou já utilizado.")
+            messages.error(request, "Código inválido.")
 
-        return redirect('credits')
-
-    context = {
-        'saldo_creditos': user_credits.saldo
-    }
-    return render(request, 'credits.html', context)
+    return render(request, "network/credits.html", {
+    "username": request.user.username,
+    "saldo": user_credits.saldo
+    })
 
 def map_view(request):
     points = MapPoint.objects.all()
-    # Serializando os pontos para JSON
     points_data = [
         {
             "name": point.name,
