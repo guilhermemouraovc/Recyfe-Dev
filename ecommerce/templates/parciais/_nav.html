@@ -6,7 +6,6 @@
     background-color: white !important; /* Substitui cores padrão */
 }
     
-
 .botaoMenu {
     background-color: transparent; /* Remove o fundo */
     border: none;                 /* Remove a borda */
@@ -19,10 +18,15 @@
     margin: auto;   /* Centraliza horizontalmente */
     vertical-align: middle; /* Alinha verticalmente */
 }
-.botaoMenu img {
-    display: block; /* Remove margens em volta da imagem */
-    margin: auto;   /* Centraliza horizontalmente */
-    vertical-align: middle; /* Alinha verticalmente */
+
+
+.sidebar ul .nav-item img {
+    transition: filter 0.3s; /* Adiciona uma transição suave para o ícone */
+}
+
+.sidebar .nav-link:hover {
+    background-color: #e0f2e9;
+    color: #28a745;
 }
 
 .sidebar {
@@ -51,6 +55,10 @@
     margin-bottom: 10px;
 }
 
+.sidenav ul .nav-item img {
+    transition: filter 0.3s; /* Adiciona uma transição suave para o ícone */
+}
+
 .sidebar .nav-link {
     display: inline-block;
     align-items: center;
@@ -60,18 +68,6 @@
     font-weight: bold;
     transition: background-color 0.3s, color 0.3s;
     border-radius: 12px;
-}
-
-.sidebar .nav-link:hover {
-    background-color: #e0f2e9;
-    color: #28a745;
-}
-
-.sidebar .nav-link.active {
-    background-color: #eaf7e6;
-    color: #3a9d23;
-    font-weight: bold;
-    border-radius: 5px;
 }
 
 
@@ -100,10 +96,28 @@
 .sidebar ul .nav-item:hover .nav-link {
     color: #28a745; /* Torna o texto verde ao passar o mouse */
 }
-orna o ícone verde */
+
+.nav-cart-icon {
+    color: #28a745; /* Define o ícone como verde */
 }
 
+.nav-cart-icon i {
+    color: #28a745; /* Verde para o ícone do carrinho */
+}
 
+.nav-cart-text {
+    color: #28a745 !important; /* Cor verde */
+    font-weight: bold;
+}
+
+/* Estiliza o ícone do carrinho */
+.nav-cart-icon i {
+    color: #28a745 !important; /* Cor verde */
+}
+
+.nav-cart-count strong {
+    color: #28a745 !important; /* Verde para a quantidade do carrinho */
+}
 
 </style>
 
@@ -122,7 +136,19 @@ orna o ícone verde */
             {% endif %}
 
             {% if request.session.carrinho %}
-           
+            <li class="nav-item">
+                <a class="nav-link nav-cart-link active" href="{% url 'produto:carrinho' %}">
+                    <span class="nav-cart-text mr-1">
+                        Carrinho
+                    </span>
+                    <span class="nav-cart-count mr-1">
+                        <strong>{{ request.session.carrinho|cart_total_qtd }}x</strong>
+                    </span>
+                    <span class="nav-cart-icon mr-2">
+                        <i class="fas fa-shopping-cart"></i>
+                    </span>
+                </a>
+            </li>
             {% endif %}
 
 
