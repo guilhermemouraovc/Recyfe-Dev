@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 
 from .models import *
 
@@ -14,3 +14,19 @@ admin.site.register(MapPoint)
 class MapPointAdmin(admin.ModelAdmin):
     list_display = ('name', 'latitude', 'longitude', 'description')
     search_fields = ('name', 'description')
+
+@admin.action(description="Adicionar créditos aos usuários selecionados")
+def adicionar_creditos(modeladmin, request, queryset):
+    for user_credit in queryset:
+        user_credit.saldo += 100  # Adicione 100 créditos (ajuste conforme necessário)
+        user_credit.save()
+    messages.success(request, "Créditos adicionados com sucesso!")
+
+@admin.register(UserCredits)
+class UserCreditsAdmin(admin.ModelAdmin):
+    list_display = ('user', 'saldo')
+    actions = [adicionar_creditos]
+
+@admin.register(Reward)
+class RewardAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'descricao', 'valor_em_creditos')

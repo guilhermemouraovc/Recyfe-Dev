@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        .creditos-ofertas {
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .ofertas-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .oferta-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .oferta-card:hover {
+            transform: scale(1.05);
+        }
+
+        .oferta-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .oferta-card-content {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .oferta-card-content h3 {
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .oferta-card-content .preco {
+            color: #28a745;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .btn-resgatar {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-resgatar:hover {
+            background-color: #218838;
+        }
+
+        .btn-resgatar:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .creditos-disponiveis {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #ffffff;
+            overflow-y: auto;
+            padding: 20px 0;
+            border-right: 1px solid #d3d3d3;
+            height: 100vh;
+        }
+
+        .sidebar img.logo {
+            display: block;
+            margin: 0 auto 20px;
+            margin-left: 5px;
+            max-width: 150px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar .nav-item {
+            margin-bottom: 10px;
+        }
+
+        .sidebar .nav-link {
+            display: inline-block;
+            align-items: center;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 12px;
+        }
+
+        .sidebar .nav-link div {
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar .nav-link svg {
+            margin-right: 10px;
+        }
+
+        .sidebar ul .nav-item img {
+            transition: filter 0.3s; /* Adiciona uma transição suave para o ícone */
+        }
+        
+        .sidebar ul .nav-item:hover img {
+            filter: brightness(0) saturate(100%) invert(50%) sepia(70%) saturate(600%) hue-rotate(85deg) brightness(90%) contrast(85%);
+            /* Torna o ícone verde ao passar o mouse */
+        }
+        
+        .sidebar ul .nav-item:hover .nav-link {
+            color: #28a745; /* Torna o texto verde ao passar o mouse */
+        }
+
+        #map {
+            flex-grow: 1;
+            height: 100%;
+        }
+    
+        .main-container {
+            display: flex;
+            height: 100vh;
+        }
+    
+        .sidebar {
+            width: 250px;
+            background-color: #ffffff;
+            overflow-y: auto;
+            padding: 20px 0;
+            border-right: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.hidden .toggle-sidebar-btn {
+            right: -40px;
+        }
+
+        .sidebar.hidden {
+            width: 50px; /* Reduced width when hidden */
+        }
+
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+        }
+        
+        .sidebar img.logo {
+            display: block;
+            margin: 0 auto 20px;
+            margin-left: 17px;
+            max-width: 150px;
+        }
+        
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            transition: opacity 0.3s ease;
+
+        }
+        
+        .sidebar .nav-item {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 10px 30px;
+            text-decoration: none;
+            color: #333;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #e0f2e9;
+            color: #28a745;
+        }
+        
+        
+        .sidebar .nav-link div {
+            display: flex;
+            align-items: center;
+        }
+    
+        #map {
+            flex-grow: 1;
+            height: 100%;
+        }
+    
+        .navbar-custom {
+            display: none;
+        }
+
+        .toggle-sidebar-btn {
+            position: absolute;
+            top: 10px;
+            right: -40px; /* Fica na borda da barra */
+            padding: 10px;
+            border: none; /* Removed border */
+            cursor: pointer;
+            transition: right 0.3s ease;
+        }
+    
+        .sidebar {
+            position: relative;
+            transform: none;
+        }
+        .btn-resgatar-disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            color: #666666;
+        }
+
+        
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar">
+            <div class="sidebar-content">
+                <img src="/media/logo-transparent.png" height="50px" alt="Recyfe Logo" class="logo">
+                <ul>
+                    <!-- Todos os posts -->
+                    <li class="nav-item" id="all_posts">
+                        <a href="{% url 'index' %}" class="nav-link">
+                            <div>
+                                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-card-heading" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                                    <path fill-rule="evenodd" d="M3 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
+                                    <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-1z"/>
+                                </svg>
+                                &nbsp;&nbsp;Todos os posts
+                            </div>
+                        </a>
+                        </li>
+                    {% if user.is_authenticated %}
+                                        <li class="nav-item" id="following">
+                                            <a href="{% url 'following' %}" class="nav-link">
+                                                <div>
+                                                    <img src="/media/favoritos.png" alt="People Icon" width="24px" />
+                                                    &nbsp;&nbsp;Favoritos
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item" id="saved">
+                                            <a href="{% url 'saved' %}" class="nav-link">
+                                                <div>
+                                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-bookmark" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M8 12l5 3V3a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12l5-3zm-4 1.234l4-2.4 4 2.4V3a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10.234z"/>
+                                                      </svg>
+                                                    &nbsp;&nbsp;Salvo
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item" id="profile">
+                                            <a href="{% url 'profile' user.username %}" class="nav-link">
+                                                <div>
+                                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-person" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M13 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM3.022 13h9.956a.274.274 0 0 0 .014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 0 0 .022.004zm9.974.056v-.002.002zM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                                                    </svg>
+                                                    &nbsp;&nbsp;Perfil
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item active" id="Signup">
+                                            <a href="{% url 'produto:lista' %}" class="nav-link">
+                                                <div>
+                                                    <img src="/media/carrinho_icon.png" alt="People Icon" width="24px" />
+                                                    &nbsp;&nbsp;Ecommerce
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item" id="Signup">
+                                            <a href="{% url 'mapa' %}" class="nav-link">
+                                                <div>
+                                                    <img src="/media/bussola.png" alt="People Icon" width="24px" />
+                                                    &nbsp;&nbsp;Mapa
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item" id="Signup">
+                                            <a href="{% url 'credits' %}" class="nav-link">
+                                                <div>
+                                                    <img src="/media/credits.png" alt="People Icon" width="20px" style="margin-left: 2px; margin-right: 2px;"/>
+                                                    &nbsp;&nbsp;Creditos
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item" id="logout">
+                                            <a href="{% url 'logout' %}" class="nav-link">
+                                                <div>
+                                                    <div>
+                                                        <img src="/media/logout.png" alt="People Icon" width="24px" />
+                                                        &nbsp;&nbsp;Log Out
+                                                    </div>
+                
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <div style="position: absolute; bottom: 10px;">
+                                            {% if user.is_authenticated %}    
+                                                <li class="nav-item sidenav-user">
+                                                    <a href="{% url 'profile' user.username %}" class="nav-link">
+                                                        <div class="user_account">
+                                                            <div class="small-profilepic" style="float: left; background-image: url(media/{{user.profile_pic}})"></div>
+                                                            <div style="height: 2.7vw; margin: auto;">
+                                                                <div style="margin-top: 4px;"><strong>{{user.first_name}} {{user.last_name}}</strong></div>
+                                                                <div class="grey" style="margin-top: 4px;">@{{ user.username }}</div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                            {% if user.is_authenticated %}
+                                                <input type="hidden" id="user_is_authenticated" value="True" data-username='{{user.username}}'>
+                                            {% else %}
+                                                <input type="hidden" id="user_is_authenticated" value="False">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                        
+                            {% else %}
+                                        <li class="nav-item" id="login">
+                                            <a href="{% url 'login' %}" class="nav-link">
+                                                <div>
+                                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-door-closed" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2zm1 0v13h8V2H4z"/>
+                                                        <path d="M7 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                                        <path fill-rule="evenodd" d="M1 15.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/>
+                                                    </svg>
+                                                    &nbsp;&nbsp;Log In
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item" id="Signup">
+                                            <a href="{% url 'register' %}" class="nav-link">
+                                                <div>
+                                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-person-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M11 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM1.022 13h9.956a.274.274 0 0 0 .014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 0 0 .022.004zm9.974.056v-.002.002zM6 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm4.5 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                                                        <path fill-rule="evenodd" d="M13 7.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z"/>
+                                                    </svg>
+                                                    &nbsp;&nbsp;Registrar
+                                                </div>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+    
+    
+            </div>
+
+            <div class="creditos-ofertas">
+            <div class="ofertas-container">
+                {% for oferta in ofertas %}
+                <div class="oferta-card">
+                    <div class="creditos-disponiveis">
+                        Custo: {{ oferta.valor_em_creditos }} Crédito(s)
+                    </div>
+                    <img src="{{ oferta.imagem.url }}" alt="{{ oferta.nome }}">
+                    <div class="oferta-card-content">
+                        <h3>{{ oferta.nome }}</h3>
+                        <p>{{ oferta.descricao }}</p>
+                        <button
+                            type="button"
+                            class="btn-resgatar"
+                            data-oferta-id="{{ oferta.id }}"
+                            onclick="resgatarOferta(this)"
+                            {% if saldo < oferta.valor_em_creditos %}disabled{% endif %}
+                        >
+                            {% if saldo >= oferta.valor_em_creditos %}Resgatar Oferta{% else %}Créditos insuficientes{% endif %}
+                        </button>
+                    </div>
+                </div>
+                <script>
+                    function resgatarOferta(button) {
+                        const ofertaId = button.getAttribute('data-oferta-id');
+                        fetch(`/resgatar-oferta/${ofertaId}/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}',
+                            },
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                button.disabled = true;
+                                button.textContent = "Resgatado";
+                                button.classList.add("btn-resgatar-disabled");
+                            } else {
+                                alert(data.error);
+                            }
+                        });
+                    }
+                </script>
+                {% empty %}
+                    <p>Ainda não há ofertas disponíveis.</p>
+                {% endfor %}
+            </div>
+        </div>
+</body>
+</html>

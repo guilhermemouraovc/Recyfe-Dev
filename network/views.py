@@ -1,18 +1,16 @@
-from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import EmailMessage, send_mail
 from django.core.paginator import Paginator
-from django.core.mail import EmailMessage
+from django.db import IntegrityError, transaction
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
-from django.core.mail import send_mail
-from django.conf import settings
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from .models import User, UserCredits, Reward, UserReward
 
 import json
 
@@ -479,34 +477,6 @@ def delete_post(request, post_id):
             return HttpResponse("Method must be 'PUT'")
     else:
         return HttpResponseRedirect(reverse('login'))
-    
-@login_required
-def credits_view(request):
-    user_credits = UserCredits.objects.get(user=request.user)
-
-    if request.method == 'POST':
-        codigo_credito = request.POST.get('codigo_credito')
-
-        try:
-            credit_code = CreditCode.objects.get(codigo=codigo_credito, utilizado=False)
-
-            user_credits.saldo += credit_code.saldo
-            user_credits.save()
-
-            credit_code.utilizado = True
-            credit_code.usuario_usado = request.user
-            credit_code.save()
-
-            messages.success(request, "Créditos adicionados com sucesso!")
-        except CreditCode.DoesNotExist:
-            messages.error(request, "Código de crédito inválido ou já utilizado.")
-
-        return redirect('credits')
-
-    context = {
-        'saldo_creditos': user_credits.saldo
-    }
-    return render(request, 'credits.html', context)
 
 @login_required
 def edit_profile(request):
@@ -541,35 +511,27 @@ def edit_profile(request):
     
 @login_required
 def credits_view(request):
-    user_credits = UserCredits.objects.get(user=request.user)
+    user_credits, _ = UserCredits.objects.get_or_create(user=request.user)
 
-    if request.method == 'POST':
-        codigo_credito = request.POST.get('codigo_credito')
-
+    if request.method == "POST":
+        code = request.POST.get("credit_code", "").strip()
         try:
-            credit_code = CreditCode.objects.get(codigo=codigo_credito, utilizado=False)
-
-            user_credits.saldo += credit_code.saldo
-            user_credits.save()
-
-            credit_code.utilizado = True
-            credit_code.usuario_usado = request.user
-            credit_code.save()
-
-            messages.success(request, "Créditos adicionados com sucesso!")
+            credit_code = CreditCode.objects.get(codigo=code)
+            if credit_code.utilizado:
+                messages.error(request, "Este código já foi utilizado.")
+            else:
+                credit_code.redeem(request.user)  
+                messages.success(request, f"{credit_code.saldo} créditos adicionados!")
         except CreditCode.DoesNotExist:
-            messages.error(request, "Código de crédito inválido ou já utilizado.")
+            messages.error(request, "Código inválido.")
 
-        return redirect('credits')
-
-    context = {
-        'saldo_creditos': user_credits.saldo
-    }
-    return render(request, 'credits.html', context)
+    return render(request, "network/credits.html", {
+    "username": request.user.username,
+    "saldo": user_credits.saldo
+    })
 
 def map_view(request):
     points = MapPoint.objects.all()
-    # Serializando os pontos para JSON
     points_data = [
         {
             "name": point.name,
@@ -580,3 +542,45 @@ def map_view(request):
         for point in points
     ]
     return render(request, 'map.html', {'points': json.dumps(points_data)})
+
+def rewards(request):
+    ofertas = Reward.objects.all()
+    user_credits = UserCredits.objects.filter(user=request.user).first()
+    saldo = user_credits.saldo if user_credits else 0  # Para evitar erros caso não exista saldo
+    return render(request, 'network/rewards.html', {
+        'ofertas': ofertas,
+        'saldo': saldo
+    })
+
+
+@login_required
+def resgatar_oferta(request, oferta_id):
+    if request.method == "POST":
+        try:
+            # Obter oferta
+            oferta = get_object_or_404(Reward, id=oferta_id)
+            
+            # Obter saldo do usuário
+            user_credits, _ = UserCredits.objects.get_or_create(user=request.user)
+
+            if user_credits.saldo < oferta.valor_em_creditos:
+                return JsonResponse({"success": False, "error": "Saldo insuficiente para resgatar esta oferta."}, status=400)
+
+            # Processar resgate
+            with transaction.atomic():  # Garantir consistência do banco de dados
+                user_credits.saldo -= oferta.valor_em_creditos
+                user_credits.save()
+
+                # Registrar resgate
+                resgate = UserReward.objects.create(user=request.user, reward=oferta)
+                resgate.save()
+
+            return JsonResponse({"success": True, "message": f"Oferta '{oferta.nome}' resgatada com sucesso!"})
+        
+        except Reward.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Oferta não encontrada."}, status=404)
+        
+        except Exception as e:
+            return JsonResponse({"success": False, "error": f"Ocorreu um erro inesperado: {str(e)}"}, status=500)
+
+    return JsonResponse({"error": "Método inválido."}, status=400)
