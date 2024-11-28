@@ -247,6 +247,12 @@
             position: relative;
             transform: none;
         }
+        .btn-resgatar-disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            color: #666666;
+        }
+
         
     </style>
 </head>
@@ -390,21 +396,46 @@
             <div class="creditos-ofertas">
             <div class="ofertas-container">
                 {% for oferta in ofertas %}
-                    <div class="oferta-card">
-                        <div class="creditos-disponiveis">
-                            Custo: {{ oferta.valor_em_creditos }} Crédito(s)
-                        </div>
-
-                        <img src="{{ oferta.imagem.url }}" alt="{{ oferta.nome }}">
-
-                        <div class="oferta-card-content">
-                            <h3>{{ oferta.nome }}</h3>
-                            <p>{{ oferta.descricao }}</p>
-                                <button type="submit" class="btn-resgatar">
-                                    Resgatar Oferta
-                                </button>     
-                        </div>
+                <div class="oferta-card">
+                    <div class="creditos-disponiveis">
+                        Custo: {{ oferta.valor_em_creditos }} Crédito(s)
                     </div>
+                    <img src="{{ oferta.imagem.url }}" alt="{{ oferta.nome }}">
+                    <div class="oferta-card-content">
+                        <h3>{{ oferta.nome }}</h3>
+                        <p>{{ oferta.descricao }}</p>
+                        <button
+                            type="button"
+                            class="btn-resgatar"
+                            data-oferta-id="{{ oferta.id }}"
+                            onclick="resgatarOferta(this)"
+                            {% if saldo < oferta.valor_em_creditos %}disabled{% endif %}
+                        >
+                            {% if saldo >= oferta.valor_em_creditos %}Resgatar Oferta{% else %}Créditos insuficientes{% endif %}
+                        </button>
+                    </div>
+                </div>
+                <script>
+                    function resgatarOferta(button) {
+                        const ofertaId = button.getAttribute('data-oferta-id');
+                        fetch(`/resgatar-oferta/${ofertaId}/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}',
+                            },
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                button.disabled = true;
+                                button.textContent = "Resgatado";
+                                button.classList.add("btn-resgatar-disabled");
+                            } else {
+                                alert(data.error);
+                            }
+                        });
+                    }
+                </script>
                 {% empty %}
                     <p>Ainda não há ofertas disponíveis.</p>
                 {% endfor %}

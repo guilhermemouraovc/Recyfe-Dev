@@ -1,7 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
-
+from django.apps import apps
+from django.conf import settings
 
 class User(AbstractUser):
     profile_pic = models.ImageField(upload_to='profile_pic/')
@@ -26,6 +27,14 @@ class UserCredits(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - Saldo: {self.saldo} créditos"
+
+class UserReward(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_rewards")
+    reward = models.ForeignKey('network.Reward', on_delete=models.CASCADE, related_name="reward_users")
+    redeemed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.reward.nome}"
 
 class CreditCode(models.Model):
     codigo = models.CharField(max_length=50, unique=True)

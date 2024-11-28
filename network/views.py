@@ -4,14 +4,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage, send_mail
 from django.core.paginator import Paginator
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Reward
-
+from .models import User, UserCredits, Reward, UserReward
 
 import json
 
@@ -557,22 +556,31 @@ def rewards(request):
 @login_required
 def resgatar_oferta(request, oferta_id):
     if request.method == "POST":
-        oferta = get_object_or_404(Reward, id=oferta_id)
+        try:
+            # Obter oferta
+            oferta = get_object_or_404(Reward, id=oferta_id)
+            
+            # Obter saldo do usuário
+            user_credits, _ = UserCredits.objects.get_or_create(user=request.user)
 
-        # Obter saldo do usuário
-        user_credits, _ = UserCredits.objects.get_or_create(user=request.user)
+            if user_credits.saldo < oferta.valor_em_creditos:
+                return JsonResponse({"success": False, "error": "Saldo insuficiente para resgatar esta oferta."}, status=400)
 
-        if user_credits.saldo >= oferta.valor_em_creditos:
-            # Descontar crédito
-            user_credits.saldo -= oferta.valor_em_creditos
-            user_credits.save()
+            # Processar resgate
+            with transaction.atomic():  # Garantir consistência do banco de dados
+                user_credits.saldo -= oferta.valor_em_creditos
+                user_credits.save()
 
-            # Registre o resgate (implemente esta lógica conforme necessário)
+                # Registrar resgate
+                resgate = UserReward.objects.create(user=request.user, reward=oferta)
+                resgate.save()
 
-            messages.success(request, f"Oferta '{oferta.nome}' resgatada com sucesso!")
-        else:
-            messages.error(request, "Saldo insuficiente para resgatar esta oferta.")
-
-        return HttpResponseRedirect(reverse("rewards"))
+            return JsonResponse({"success": True, "message": f"Oferta '{oferta.nome}' resgatada com sucesso!"})
+        
+        except Reward.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Oferta não encontrada."}, status=404)
+        
+        except Exception as e:
+            return JsonResponse({"success": False, "error": f"Ocorreu um erro inesperado: {str(e)}"}, status=500)
 
     return JsonResponse({"error": "Método inválido."}, status=400)
