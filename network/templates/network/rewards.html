@@ -386,26 +386,29 @@
     
     
             </div>
+
             <div class="creditos-ofertas">
-                <div class="ofertas-container">
-                    {% for oferta in ofertas %}
+            <div class="ofertas-container">
+                {% for oferta in ofertas %}
                     <div class="oferta-card">
-                        <div class="creditos-disponiveis">Custo: {{ oferta.valor_em_creditos }} Crédito(s)</div>
+                        <div class="creditos-disponiveis">
+                            Custo: {{ oferta.valor_em_creditos }} Crédito(s)
+                        </div>
+
                         <img src="{{ oferta.imagem.url }}" alt="{{ oferta.nome }}">
+
                         <div class="oferta-card-content">
                             <h3>{{ oferta.nome }}</h3>
                             <p>{{ oferta.descricao }}</p>
-                            <form method="post" action="{% url 'resgatar_oferta' %}">
-                                {% csrf_token %}
-                                <input type="hidden" name="oferta_id" value="{{ oferta.id }}">
-                                <button type="submit" class="btn-resgatar" {% if saldo < oferta.valor_em_creditos %}disabled{% endif %}>
+                                <button type="submit" class="btn-resgatar">
                                     Resgatar Oferta
-                                </button>
-                            </form>
+                                </button>     
                         </div>
                     </div>
-                    {% endfor %}
-                </div>
+                {% empty %}
+                    <p>Ainda não há ofertas disponíveis.</p>
+                {% endfor %}
             </div>
+        </div>
 </body>
 </html>

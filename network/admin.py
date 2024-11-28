@@ -26,3 +26,7 @@ def adicionar_creditos(modeladmin, request, queryset):
 class UserCreditsAdmin(admin.ModelAdmin):
     list_display = ('user', 'saldo')
     actions = [adicionar_creditos]
+
+@admin.register(Reward)
+class RewardAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'descricao', 'valor_em_creditos')

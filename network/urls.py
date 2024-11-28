@@ -37,7 +37,6 @@ urlpatterns = [
     path("n/post/<int:post_id>/edit", views.edit_post, name="editpost"),
     path("n/creditos", views.credits_view, name="credits"),
     path("n/resgatar_oferta", views.resgatar_oferta, name="resgatar_oferta"),
-    path("n/criar_oferta", views.criar_oferta, name="criar_oferta"),
     path("n/rewards", views.rewards, name="rewards"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

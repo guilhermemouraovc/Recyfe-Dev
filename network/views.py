@@ -545,12 +545,18 @@ def map_view(request):
     return render(request, 'map.html', {'points': json.dumps(points_data)})
 
 def rewards(request):
-    return render(request, 'network/rewards.html' )
+    ofertas = Reward.objects.all()
+    user_credits = UserCredits.objects.filter(user=request.user).first()
+    saldo = user_credits.saldo if user_credits else 0  # Para evitar erros caso não exista saldo
+    return render(request, 'network/rewards.html', {
+        'ofertas': ofertas,
+        'saldo': saldo
+    })
+
 
 @login_required
-def resgatar_oferta(request):
+def resgatar_oferta(request, oferta_id):
     if request.method == "POST":
-        oferta_id = request.POST.get("oferta_id")
         oferta = get_object_or_404(Reward, id=oferta_id)
 
         # Obter saldo do usuário
@@ -562,28 +568,11 @@ def resgatar_oferta(request):
             user_credits.save()
 
             # Registre o resgate (implemente esta lógica conforme necessário)
-            # Por exemplo: criar uma relação entre usuário e oferta resgatada
 
             messages.success(request, f"Oferta '{oferta.nome}' resgatada com sucesso!")
         else:
             messages.error(request, "Saldo insuficiente para resgatar esta oferta.")
 
         return HttpResponseRedirect(reverse("rewards"))
-    
+
     return JsonResponse({"error": "Método inválido."}, status=400)
-
-@login_required
-def criar_oferta(request):
-    if request.method == "POST":
-        form = RewardForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('rewards')  # Redireciona para a página de ofertas
-    else:
-        form = RewardForm()
-    return render(request, "criar_oferta.html", {"form": form})
-
-def rewards(request):
-    ofertas = Reward.objects.all()
-    saldo = UserCredits.objects.get(user=request.user).saldo
-    return render(request, "rewards.html", {"ofertas": ofertas, "saldo": saldo})
