@@ -10,7 +10,9 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+from django.db import models
 from .models import Reward
+from .models import Resgate
 
 
 import json
@@ -546,28 +548,28 @@ def map_view(request):
 
 def rewards(request):
     ofertas = Reward.objects.all()
+    resgates_ids = Resgate.objects.filter(usuario=request.user).values_list('oferta_id', flat=True)
     user_credits = UserCredits.objects.filter(user=request.user).first()
-    saldo = user_credits.saldo if user_credits else 0  # Para evitar erros caso não exista saldo
+    saldo = user_credits.saldo if user_credits else 0
     return render(request, 'network/rewards.html', {
         'ofertas': ofertas,
-        'saldo': saldo
+        'saldo': saldo,
+        'resgates_ids': resgates_ids
     })
-
 
 @login_required
 def resgatar_oferta(request, oferta_id):
     if request.method == "POST":
         oferta = get_object_or_404(Reward, id=oferta_id)
-
-        # Obter saldo do usuário
         user_credits, _ = UserCredits.objects.get_or_create(user=request.user)
 
         if user_credits.saldo >= oferta.valor_em_creditos:
-            # Descontar crédito
+            # Descontar créditos
             user_credits.saldo -= oferta.valor_em_creditos
             user_credits.save()
 
-            # Registre o resgate (implemente esta lógica conforme necessário)
+            # Registrar o resgate
+            Resgate.objects.create(usuario=request.user, oferta=oferta)
 
             messages.success(request, f"Oferta '{oferta.nome}' resgatada com sucesso!")
         else:
@@ -576,3 +578,12 @@ def resgatar_oferta(request, oferta_id):
         return HttpResponseRedirect(reverse("rewards"))
 
     return JsonResponse({"error": "Método inválido."}, status=400)
+
+
+
+
+
+@login_required
+def resgates(request):
+    resgates = Resgate.objects.filter(usuario=request.user).select_related('oferta')
+    return render(request, 'network/resgates.html', {'resgates': resgates})

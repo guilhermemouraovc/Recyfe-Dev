@@ -388,7 +388,6 @@
             </div>
 
             <div class="creditos-ofertas">
-            <div class="ofertas-container">
                 {% for oferta in ofertas %}
                     <div class="oferta-card">
                         <img src="{{ oferta.imagem.url }}" alt="{{ oferta.nome }}">
@@ -400,14 +399,15 @@
                             {% else %}
                                 <form method="POST" action="{% url 'resgatar_oferta' oferta.id %}">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn-resgatar">Resgatar</button>
+                                    <button class="btn-resgatar">Resgatar</button>
                                 </form>
-            {% endif %}
-        </div>
-    </div>
-{% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
 
             </div>
+            
         </div>
 </body>
 </html>

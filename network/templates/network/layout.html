@@ -321,6 +321,17 @@
                                                                 </a>
                                                             </li>
                                                             <li class="nav-item" id="logout">
+                                                                <a href="{% url 'resgates' %}" class="nav-link">
+                                                                    <div>
+                                                                        <div>
+                                                                            <img src="/media/credits.png" alt="People Icon" width="24px" />
+                                                                            &nbsp;&nbsp;Meus Resgates
+                                                                        </div>
+                                    
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item" id="logout">
                                                                 <a href="{% url 'logout' %}" class="nav-link">
                                                                     <div>
                                                                         <div>
@@ -358,12 +369,9 @@
                                                                 </a>
                                                             </li>
                                                         {% endif %}
-                                                    </ul>
-                                        
-                                        
-                        
-                                </div>
-                        </div>
+                                                    </ul>   
+                                            </div>
+                                        </div>
                     {% else %}
                         <div class="guest-box">
                             <center>
