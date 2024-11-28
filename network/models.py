@@ -22,14 +22,14 @@ class User(AbstractUser):
     
 class UserCredits(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user_credits")
-    saldo = models.PositiveIntegerField(default=0) 
+    saldo = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"{self.user.username} - Saldo: {self.saldo} créditos"
 
 class CreditCode(models.Model):
     codigo = models.CharField(max_length=50, unique=True)
-    saldo = models.PositiveIntegerField(default=100) 
+    saldo = models.PositiveIntegerField(default=100)
     utilizado = models.BooleanField(default=False)
     criado_em = models.DateTimeField(auto_now_add=True)
     usuario_usado = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -37,11 +37,24 @@ class CreditCode(models.Model):
     def __str__(self):
         return f"{self.codigo} - {'Usado' if self.utilizado else 'Válido'}"
 
+    def redeem(self, user):
+        if not self.utilizado:
+            user_credits, _ = UserCredits.objects.get_or_create(user=user)
+            user_credits.saldo += self.saldo
+            user_credits.save()
+
+            self.utilizado = True
+            self.usuario_usado = user
+            self.save()
+        else:
+            raise ValueError("Este código já foi utilizado.")
+
+
 class Reward(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.TextField()
-    valor_em_creditos = models.PositiveIntegerField()  
-    imagem = models.ImageField(upload_to='recompensas/') 
+    valor_em_creditos = models.PositiveIntegerField()
+    imagem = models.ImageField(upload_to='recompensas/')
 
     def __str__(self):
         return f"{self.nome} - {self.valor_em_creditos} créditos"

@@ -181,14 +181,6 @@
             transition: right 0.3s ease;
         }
     
-        .sidebar.hidden .toggle-sidebar-btn {
-            right: -30px; /* Ajusta o botão quando a barra está escondida */
-        }
-    
-        .sidebar.hidden ~ .toggle-sidebar-btn {
-            left: 10px; /* Reposiciona o botão na borda da tela */
-        }
-    
         .sidebar {
             position: relative;
             transform: none;
@@ -201,7 +193,6 @@
 
     
     <div class="main-container">
-        
         <!-- Sidebar -->
         <div id="sidebar" class="sidebar">
             <div class="sidebar-content">
@@ -262,6 +253,14 @@
                                                 <div>
                                                     <img src="/media/bussola.png" alt="People Icon" width="24px" />
                                                     &nbsp;&nbsp;Mapa
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item" id="Signup">
+                                            <a href="{% url 'credits' %}" class="nav-link">
+                                                <div>
+                                                    <img src="/media/credits.png" alt="People Icon" width="20px" style="margin-left: 2px; margin-right: 2px;"/>
+                                                    &nbsp;&nbsp;Creditos
                                                 </div>
                                             </a>
                                         </li>
