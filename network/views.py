@@ -10,8 +10,6 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-
-from network.forms import RewardForm
 from .models import Reward
 
 
