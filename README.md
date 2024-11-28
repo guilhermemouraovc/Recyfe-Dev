@@ -32,16 +32,9 @@ Este projeto é licenciado sob a [MIT License](https://opensource.org/licenses/M
 - [Joao Lucas](https://github.com/JRobalinho) - jlvrf@cesar.school
 - [Caio Ferreira](https://github.com/CaioLira18) - cflo@cesar.school
 
-
-
-<details>
-<summary><h2>Links</h2></summary>
+## Site
 
 - [Site - Azure](https://recyfe.azurewebsites.net/)
-
-- [Figma - Prototipo Lo-fi](https://www.figma.com/design/41Ibz8AEwuqGG0PivkYSAL/Prot%C3%B3tipo-baixa-fidelidade?node-id=0-1&node-type=canvas)
-
-</details>
 
 
 <details>
@@ -298,9 +291,9 @@ Então uma mensagem "Nenhum crédito disponível para os itens reciclados" deve 
 
 ## Links Relevantes:
 
-- Projeto no Jira
-- Protótipo de Média Fidelidade no Figma
-- Screencast do Protótipo de Média Fidelidade
+- [Projeto no Jira](https://cesar-team-pkcqpghh.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?selectedIssue=SCRUM-5)
+- [Protótipo de Média Fidelidade no Figma](https://www.figma.com/design/r7UbvzWSKmMyssPNiVZ9aN/Prot%C3%B3tipo-m%C3%A9dia-fidelidade?node-id=3-16&node-type=canvas&t=Hs3Z2o3N54AUvip7-0)
+- [Screencast do Protótipo de Média Fidelidade](https://youtu.be/sY4a9ruACbE)
 - Screencast CI/CD com Build e Deployment Automatizado
 - Screencast da Execução dos Testes
 
@@ -649,5 +642,61 @@ Então o sistema deve bloquear o acesso e exibir a mensagem "Permissão negada. 
 
 ## Programacao em Par:
 
+Na segunda etapa (SR2) do projeto **Recyfe**, focamos na implementação de funcionalidades estratégicas alinhadas às histórias de usuário definidas, testes automatizados e integração contínua. A equipe foi organizada em pares e trios, com responsabilidades específicas. Abaixo, destacamos as experiências e resultados obtidos durante a programação em par, enfatizando os benefícios e desafios enfrentados.
+
+---
+
+### Par 01 – Luís Guilherme e João Lucas Robalinho (Front-end)
+**Responsabilidades:**  
+- Implementação de funcionalidades do Feed (visualização de postagens, curtidas, comentários e criação de novos posts).  
+
+**Destaques:**  
+- Integração contínua permitiu detectar erros de design e lógica precocemente.  
+- Interface final foi limpa, funcional e alinhada às histórias definidas.  
+
+**Aprendizados:**  
+- Revisões conjuntas ao final de cada sessão foram cruciais para a qualidade do código.  
+- Apesar das dificuldades iniciais na adaptação ao ritmo da programação em par, os resultados superaram as expectativas.
+
+---
+
+### Par 02 – Henrique e Jerônimo (Sistema de Créditos e Testes Automatizados)
+**Responsabilidades:**  
+- Implementação do sistema de créditos (gerenciamento de recompensas por práticas sustentáveis).  
+- Criação de testes automatizados e pipeline de integração contínua (CI/CD).  
+
+**Destaques:**  
+- A troca de conhecimentos técnicos foi um diferencial.  
+- Henrique liderou a definição da arquitetura, enquanto Jerônimo integrou a pipeline automatizada.  
+
+**Aprendizados:**  
+- Suporte mútuo foi determinante para solucionar problemas de integração durante o deploy.  
+
+---
+
+### Par 03 – Caio Lira e Guilherme Mourão (Localização Geográfica e e-Commerce)
+**Responsabilidades:**  
+- Desenvolvimento da visualização de pontos de doação no mapa.  
+- Implementação da funcionalidade de e-commerce.  
+
+**Destaques:**  
+- Feedbacks regulares entre os membros garantiram uma conexão coesa entre as funcionalidades.  
+- A localização geográfica exigiu ajustes em tempo real para melhorar a precisão dos marcadores.  
+
+**Aprendizados:**  
+- Comunicação frequente foi vital para alinhar o design do mapa aos requisitos do e-commerce.  
+- Revisões conjuntas garantiram qualidade e integração entre os módulos.
+
+---
+
+### Conclusões
+A programação em par foi essencial para o sucesso da segunda etapa do projeto **Recyfe**. Apesar de não ser aplicada integralmente em todos os momentos, a abordagem colaborativa proporcionou maior qualidade no código, redução de inconsistências e troca contínua de conhecimento entre os membros.
+
+### Pontos de Destaque:
+- Divisão de responsabilidades seguiu o plano inicial, com liderança bem definida em cada subgrupo.  
+- Ferramentas como GitHub e Trello foram fundamentais para a organização do projeto.  
+- Testes automatizados e a pipeline de CI/CD garantiram confiabilidade nas entregas.  
+
+O projeto continua apresentando grande potencial, e a experiência com programação em par reforçou a coesão da equipe, destacando a importância do trabalho colaborativo no desenvolvimento de sistemas robustos e escaláveis.
 
 </details>
