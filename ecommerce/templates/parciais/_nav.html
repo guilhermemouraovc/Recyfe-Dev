@@ -170,12 +170,8 @@
                 <li class="nav-item" id="all_posts">
                     <a href="{% url 'index' %}" class="nav-link">
                         <div>
-                            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-card-heading" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                                <path fill-rule="evenodd" d="M3 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
-                                <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-1z"/>
-                            </svg>
-                            &nbsp;&nbsp;Todos os posts
+                            <img src="/media/home.png" alt="Home Icon" width="20px" style="margin-left: 2px; margin-right: 2px;"/>
+                            &nbsp;&nbsp;Home
                         </div>
                     </a>
                     </li>
@@ -190,22 +186,10 @@
                                             </div>
                                         </a>
                                     </li>
-                                    <li class="nav-item" id="saved">
-                                        <a href="{% url 'saved' %}" class="nav-link">
-                                            <div>
-                                                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-bookmark" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" d="M8 12l5 3V3a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12l5-3zm-4 1.234l4-2.4 4 2.4V3a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10.234z"/>
-                                                  </svg>
-                                                &nbsp;&nbsp;Salvo
-                                            </div>
-                                        </a>
-                                    </li>
                                     <li class="nav-item" id="profile">
                                         <a href="{% url 'profile' user.username %}" class="nav-link">
                                             <div>
-                                                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-person" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" d="M13 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM3.022 13h9.956a.274.274 0 0 0 .014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 0 0 .022.004zm9.974.056v-.002.002zM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                                                </svg>
+                                                <img src="/media/perfil.png" alt="People Icon" width="20px" style="margin-left: 2px; margin-right: 2px;"/>
                                                 &nbsp;&nbsp;Perfil
                                             </div>
                                         </a>

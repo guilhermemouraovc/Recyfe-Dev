@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -302,26 +303,13 @@
             <div class="sidebar-content">
                 <img src="/media/logo-transparent.png" height="50px" alt="Recyfe Logo" class="logo">
                 <ul>
-                    <!-- Todos os posts -->
-                    <li class="nav-item" id="all_posts">
-                        <a href="{% url 'index' %}" class="nav-link">
-                            <div>
-                                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-card-heading" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                                    <path fill-rule="evenodd" d="M3 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
-                                    <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-1z"/>
-                                </svg>
-                                &nbsp;&nbsp;Todos os posts
-                            </div>
-                        </a>
-                        </li>
                     {% if user.is_authenticated %}
                     <ul>
                         <li class="nav-item" id="all_posts">
                         <a href="{% url 'index' %}" class="nav-link">
                             <div>
                                 <img src="/media/home.png" alt="Home Icon" width="20px" style="margin-left: 2px; margin-right: 2px;"/>
-                                &nbsp;&nbsp;Todos os posts
+                                &nbsp;&nbsp;Home
                             </div>
                         </a>
                         </li>
