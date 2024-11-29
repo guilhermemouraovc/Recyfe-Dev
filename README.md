@@ -666,6 +666,10 @@ O **Recyfe** possui duas abas laterais que organizam suas funcionalidades:
 - Para interagir com posts, criar conteúdo ou acessar funcionalidades adicionais, é necessário realizar login ou cadastro.
 - O login ou cadastro pode ser acessado na **aba lateral esquerda**.
 
+### SuperUser
+- Usuario: admin
+- Senha: admin
+
 ## Diagrama de atividades do sistema:
 
 ![Sem título](https://github.com/user-attachments/assets/b581b8ce-a5d5-4872-bdc9-029d17f72362)
