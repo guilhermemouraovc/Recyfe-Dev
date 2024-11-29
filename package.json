@@ -1,0 +1,17 @@
+{
+  "name": "recyfe-dev",
+  "version": "1.0.0",
+  "description": "![Imagem do WhatsApp de 2024-10-17 à(s) 00 07 14_7e13165b](https://github.com/user-attachments/assets/bbc79c7a-d803-460e-b62f-8a1ea2923d88)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "^13.16.0"
+  },
+  "devDependencies": {
+    "cypress-file-upload": "^5.0.8"
+  }
+}
