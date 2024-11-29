@@ -32,16 +32,9 @@ Este projeto é licenciado sob a [MIT License](https://opensource.org/licenses/M
 - [Joao Lucas](https://github.com/JRobalinho) - jlvrf@cesar.school
 - [Caio Ferreira](https://github.com/CaioLira18) - cflo@cesar.school
 
-
-
-<details>
-<summary><h2>Links</h2></summary>
+## Site
 
 - [Site - Azure](https://recyfe.azurewebsites.net/)
-
-- [Figma - Prototipo Lo-fi](https://www.figma.com/design/41Ibz8AEwuqGG0PivkYSAL/Prot%C3%B3tipo-baixa-fidelidade?node-id=0-1&node-type=canvas)
-
-</details>
 
 
 <details>
@@ -298,9 +291,9 @@ Então uma mensagem "Nenhum crédito disponível para os itens reciclados" deve 
 
 ## Links Relevantes:
 
-- Projeto no Jira
-- Protótipo de Média Fidelidade no Figma
-- Screencast do Protótipo de Média Fidelidade
+- [Projeto no Jira](https://cesar-team-pkcqpghh.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?selectedIssue=SCRUM-5)
+- [Protótipo de Média Fidelidade no Figma](https://www.figma.com/design/r7UbvzWSKmMyssPNiVZ9aN/Prot%C3%B3tipo-m%C3%A9dia-fidelidade?node-id=3-16&node-type=canvas&t=Hs3Z2o3N54AUvip7-0)
+- [Screencast do Protótipo de Média Fidelidade](https://youtu.be/sY4a9ruACbE)
 - Screencast CI/CD com Build e Deployment Automatizado
 - Screencast da Execução dos Testes
 
@@ -633,13 +626,64 @@ Então o sistema deve bloquear o acesso e exibir a mensagem "Permissão negada. 
 
 ## Instruções de acesso ao projeto:
 
-## Diagrama de atividades do sistema
+
+### Página Inicial
+Ao acessar o **Recyfe**, você visualizará a **home**, onde estão listados todos os posts da comunidade. Esses posts podem ser curtidos, comentados e adicionados aos seus favoritos, mas para realizar qualquer ação, é necessário estar logado.
+
+### Menu Lateral
+O **Recyfe** possui duas abas laterais que organizam suas funcionalidades:
+
+### Aba Lateral Esquerda
+- **Home**: Página principal, com posts da comunidade.
+- **Perfil**: Permite visualizar suas postagens e editar informações pessoais.
+- **Mapa**: Mostra os pontos de doação e lojas cadastrados pelo administrador. Clique nos marcadores para visualizar mais detalhes sobre cada ponto.
+- **E-commerce**: Exibe os produtos disponíveis para compra. Você pode adicionar itens ao carrinho e finalizar a compra via WhatsApp com um vendedor. Após a compra, um e-mail de confirmação será enviado.
+- **Recompensas**: Lista recompensas que podem ser trocadas por créditos. Esses créditos são acumulados ao doar resíduos têxteis nos pontos de doação e são gerenciados pelo administrador.
+- **Criar Post**: Permite criar novas postagens com texto e, opcionalmente, adicionar imagens. Clique em "Postar" para publicar.
+- **Admin**: Direciona para o painel de administração (Django Admin), onde administradores podem:
+  - Gerenciar créditos dos usuários.
+  - Adicionar produtos.
+  - Cadastrar pontos no mapa.
+  - Inserir novas recompensas.
+
+### Aba Lateral Direita
+- **Favoritos**: Lista todos os posts que você marcou como favoritos.
+- **Meus Resgates**: Mostra as recompensas que você já resgatou.
+- **Log Out**: Permite sair da conta e retornar à home como visitante.
+
+### Funcionalidades Detalhadas
+1. **Perfil**: No perfil, é possível editar informações pessoais e acessar as postagens feitas por você.
+2. **Mapa**: Navegue pelos pontos de doação e lojas cadastrados. Clique nos marcadores para ver informações específicas sobre cada local.
+3. **E-commerce**: Compre produtos adicionando-os ao carrinho. Finalize a compra diretamente pelo WhatsApp com um vendedor. Após o processo, um e-mail confirmará a transação.
+4. **Recompensas**: Resgate recompensas disponíveis com os créditos que você acumulou ao doar resíduos.
+5. **Administração**: Ao acessar o painel administrativo como administrador, você terá controle sobre:
+   - Créditos dos usuários.
+   - Produtos disponíveis no e-commerce.
+   - Pontos exibidos no mapa.
+   - Recompensas para resgate.
+
+### Acesso
+- É possível navegar pela home e visualizar posts sem estar logado.
+- Para interagir com posts, criar conteúdo ou acessar funcionalidades adicionais, é necessário realizar login ou cadastro.
+- O login ou cadastro pode ser acessado na **aba lateral esquerda**.
+
+## Diagrama de atividades do sistema:
+
+![Sem título](https://github.com/user-attachments/assets/b581b8ce-a5d5-4872-bdc9-029d17f72362)
 
 ## Issues/bug tracker:
 
 - Issues Abertas:
 
+![Captura de tela 2024-11-28 174116](https://github.com/user-attachments/assets/c44f1470-932f-4d0d-8cb3-dab81c9c1e49)
+
+![Captura de tela 2024-11-28 174230](https://github.com/user-attachments/assets/6c1b0275-6385-4b11-8777-5c14190ee8ea)
+
 - Issues Fechadas:
+
+![Captura de tela 2024-11-28 223008](https://github.com/user-attachments/assets/1cdbeec5-07b1-441f-95e6-238db0859e45)
+ 
+![Captura de tela 2024-11-28 223035](https://github.com/user-attachments/assets/d4fb0aac-1710-4220-9461-75de77829327)
 
 ## Print dos quadros da Sprints/Backlog:
 
@@ -649,5 +693,54 @@ Então o sistema deve bloquear o acesso e exibir a mensagem "Permissão negada. 
 
 ## Programacao em Par:
 
+Na segunda etapa (SR2) do projeto **Recyfe**, focamos na implementação de funcionalidades estratégicas alinhadas às histórias de usuário definidas, testes automatizados e integração contínua. A equipe foi organizada em pares e trios, com responsabilidades específicas. Abaixo, destacamos as experiências e resultados obtidos durante a programação em par, enfatizando os benefícios e desafios enfrentados.
+
+---
+
+### Par 01 – Luís Guilherme e João Lucas Robalinho (Front-end)
+**Responsabilidades:**  
+- Implementação de funcionalidades do Feed (visualização de postagens, curtidas, comentários e criação de novos posts).  
+
+**Destaques:**  
+- Integração contínua permitiu detectar erros de design e lógica precocemente.  
+- Interface final foi limpa, funcional e alinhada às histórias definidas.  
+
+**Aprendizados:**  
+- Revisões conjuntas ao final de cada sessão foram cruciais para a qualidade do código.  
+- Apesar das dificuldades iniciais na adaptação ao ritmo da programação em par, os resultados superaram as expectativas.
+
+---
+
+### Par 02 – Henrique e Guilherme Mourão (Sistema de Créditos e Testes Automatizados)
+**Responsabilidades:**  
+- Implementação do sistema de créditos (gerenciamento de recompensas por práticas sustentáveis).  
+- Criação de testes automatizados e pipeline de integração contínua (CI/CD).  
+
+**Destaques:**  
+- A troca de conhecimentos técnicos foi um diferencial.  
+- Henrique liderou a definição da arquitetura, enquanto Guilherme Mourão integrou a pipeline automatizada.  
+
+**Aprendizados:**  
+- Suporte mútuo foi determinante para solucionar problemas de integração durante o deploy.  
+
+---
+
+### Par 03 – Caio Lira e Jerônimo (Localização Geográfica e e-Commerce)
+**Responsabilidades:**  
+- Desenvolvimento da visualização de pontos de doação no mapa.  
+- Implementação da funcionalidade de e-commerce.  
+
+**Destaques:**  
+- Feedbacks regulares entre os membros garantiram uma conexão coesa entre as funcionalidades.  
+- A localização geográfica exigiu ajustes em tempo real para melhorar a precisão dos marcadores.  
+
+**Aprendizados:**  
+- Comunicação frequente foi vital para alinhar o design do mapa aos requisitos do e-commerce.  
+- Revisões conjuntas garantiram qualidade e integração entre os módulos.
+
+---
+
+### Conclusões
+A programação em par foi essencial para o sucesso da segunda etapa do projeto **Recyfe**. Apesar de não ser aplicada integralmente em todos os momentos, a abordagem colaborativa proporcionou maior qualidade no código, redução de inconsistências e troca contínua de conhecimento entre os membros.
 
 </details>
