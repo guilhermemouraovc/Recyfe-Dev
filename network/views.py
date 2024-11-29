@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from .models import User, UserCredits, Reward, UserReward
+from .models import Resgate, User, UserCredits, Reward, UserReward
 
 import json
 
@@ -63,6 +63,8 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("index"))
 
 
+from .models import UserCredits
+
 def register(request):
     if request.method == "POST":
         username = request.POST["username"]
@@ -70,9 +72,7 @@ def register(request):
         fname = request.POST["firstname"]
         lname = request.POST["lastname"]
         profile = request.FILES.get("profile")
-        print(f"--------------------------Profile: {profile}----------------------------")
         cover = request.FILES.get('cover')
-        print(f"--------------------------Cover: {cover}----------------------------")
 
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
@@ -89,13 +89,19 @@ def register(request):
                 user.profile_pic = profile
             else:
                 user.profile_pic = "profile_pic/no_pic.png"
-            user.cover = cover           
+            user.cover = cover
             user.save()
+
+            # Criação automática dos créditos para o novo usuário
+            user_credits = UserCredits(user=user)  # Cria o objeto de créditos
+            user_credits.save()  # Salva o objeto no banco de dados
+            
             Follower.objects.create(user=user)
         except IntegrityError:
             return render(request, "network/register.html", {
                 "message": "Username already taken."
             })
+        
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
@@ -544,12 +550,21 @@ def map_view(request):
     return render(request, 'map.html', {'points': json.dumps(points_data)})
 
 def rewards(request):
+    # Obtenha todas as ofertas disponíveis
     ofertas = Reward.objects.all()
+
+    # IDs das ofertas já resgatadas pelo usuário atual
+    resgates_ids = Resgate.objects.filter(usuario=request.user).values_list('oferta_id', flat=True)
+
+    # Obtenha o saldo do usuário
     user_credits = UserCredits.objects.filter(user=request.user).first()
-    saldo = user_credits.saldo if user_credits else 0  # Para evitar erros caso não exista saldo
+    saldo = user_credits.saldo if user_credits else 0
+
     return render(request, 'network/rewards.html', {
-        'ofertas': ofertas,
-        'saldo': saldo
+        'ofertas': ofertas,  # Todas as ofertas disponíveis
+        'saldo': saldo,      # Saldo do usuário
+        'resgates_ids': list(resgates_ids)
+
     })
 
 
@@ -557,30 +572,40 @@ def rewards(request):
 def resgatar_oferta(request, oferta_id):
     if request.method == "POST":
         try:
-            # Obter oferta
+            # Obter a oferta
             oferta = get_object_or_404(Reward, id=oferta_id)
-            
-            # Obter saldo do usuário
+
+            # Verificar se o resgate já existe
+            if Resgate.objects.filter(usuario=request.user, oferta=oferta).exists():
+                return JsonResponse({"success": False, "error": "Você já resgatou esta oferta."}, status=400)
+
+            # Obter o saldo do usuário
             user_credits, _ = UserCredits.objects.get_or_create(user=request.user)
 
             if user_credits.saldo < oferta.valor_em_creditos:
                 return JsonResponse({"success": False, "error": "Saldo insuficiente para resgatar esta oferta."}, status=400)
 
-            # Processar resgate
-            with transaction.atomic():  # Garantir consistência do banco de dados
+            # Criar o resgate
+            with transaction.atomic():
                 user_credits.saldo -= oferta.valor_em_creditos
                 user_credits.save()
 
-                # Registrar resgate
-                resgate = UserReward.objects.create(user=request.user, reward=oferta)
-                resgate.save()
+                resgate = Resgate.objects.create(usuario=request.user, oferta=oferta)
+                print(f"Resgate criado: {resgate}")  # Adicione este print para verificar
 
             return JsonResponse({"success": True, "message": f"Oferta '{oferta.nome}' resgatada com sucesso!"})
-        
+
         except Reward.DoesNotExist:
             return JsonResponse({"success": False, "error": "Oferta não encontrada."}, status=404)
-        
+
         except Exception as e:
             return JsonResponse({"success": False, "error": f"Ocorreu um erro inesperado: {str(e)}"}, status=500)
 
     return JsonResponse({"error": "Método inválido."}, status=400)
+
+
+@login_required
+def resgates(request):
+    resgates = Resgate.objects.filter(usuario=request.user).select_related('oferta')
+    print(resgates)  # Verificar se existem resultados
+    return render(request, 'network/resgates.html', {'resgates': resgates})

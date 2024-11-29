@@ -86,6 +86,50 @@
             border-radius: 5px;
             font-weight: bold;
         }
+
+        .main-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .credit-container {
+            padding: 20px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .credit-container h1 {
+            font-size: 2em;
+            margin: 0;
+        }
+
+        .credit-container p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+       
+
+    </style>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        .main-container {
+            display: flex;
+            height: 100vh;
+        }
+
         .sidebar {
             width: 250px;
             background-color: #ffffff;
@@ -247,12 +291,6 @@
             position: relative;
             transform: none;
         }
-        .btn-resgatar-disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-            color: #666666;
-        }
-
         
     </style>
 </head>
@@ -278,69 +316,78 @@
                         </a>
                         </li>
                     {% if user.is_authenticated %}
-                                        <li class="nav-item" id="following">
-                                            <a href="{% url 'following' %}" class="nav-link">
-                                                <div>
-                                                    <img src="/media/favoritos.png" alt="People Icon" width="24px" />
-                                                    &nbsp;&nbsp;Favoritos
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item" id="saved">
-                                            <a href="{% url 'saved' %}" class="nav-link">
-                                                <div>
-                                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-bookmark" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" d="M8 12l5 3V3a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12l5-3zm-4 1.234l4-2.4 4 2.4V3a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10.234z"/>
-                                                      </svg>
-                                                    &nbsp;&nbsp;Salvo
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item" id="profile">
-                                            <a href="{% url 'profile' user.username %}" class="nav-link">
-                                                <div>
-                                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-person" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" d="M13 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM3.022 13h9.956a.274.274 0 0 0 .014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 0 0 .022.004zm9.974.056v-.002.002zM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                                                    </svg>
-                                                    &nbsp;&nbsp;Perfil
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item active" id="Signup">
-                                            <a href="{% url 'produto:lista' %}" class="nav-link">
-                                                <div>
-                                                    <img src="/media/carrinho_icon.png" alt="People Icon" width="24px" />
-                                                    &nbsp;&nbsp;Ecommerce
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item" id="Signup">
-                                            <a href="{% url 'mapa' %}" class="nav-link">
-                                                <div>
-                                                    <img src="/media/bussola.png" alt="People Icon" width="24px" />
-                                                    &nbsp;&nbsp;Mapa
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item" id="Signup">
-                                            <a href="{% url 'credits' %}" class="nav-link">
-                                                <div>
-                                                    <img src="/media/credits.png" alt="People Icon" width="20px" style="margin-left: 2px; margin-right: 2px;"/>
-                                                    &nbsp;&nbsp;Creditos
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item" id="logout">
-                                            <a href="{% url 'logout' %}" class="nav-link">
-                                                <div>
-                                                    <div>
-                                                        <img src="/media/logout.png" alt="People Icon" width="24px" />
-                                                        &nbsp;&nbsp;Log Out
-                                                    </div>
-                
-                                                </div>
-                                            </a>
-                                        </li>
+                    <ul>
+                        <li class="nav-item" id="all_posts">
+                        <a href="{% url 'index' %}" class="nav-link">
+                            <div>
+                                <img src="/media/home.png" alt="Home Icon" width="20px" style="margin-left: 2px; margin-right: 2px;"/>
+                                &nbsp;&nbsp;Todos os posts
+                            </div>
+                        </a>
+                        </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item" id="profile">
+                                <a href="{% url 'profile' user.username %}" class="nav-link">
+                                    <div>
+                                        <img src="/media/perfil.png" alt="People Icon" width="20px" style="margin-left: 2px; margin-right: 2px;"/>
+                                        &nbsp;&nbsp;Perfil
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item" id="Signup">
+                                <a href="{% url 'produto:lista' %}" class="nav-link">
+                                    <div>
+                                        <img src="/media/carrinho_icon.png" alt="People Icon" width="20px" style="margin-left: 2px; margin-right: 2px;"/>
+                                        &nbsp;&nbsp;Ecommerce
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item" id="Signup">
+                                <a href="{% url 'mapa' %}" class="nav-link">
+                                    <div>
+                                        <img src="/media/bussola.png" alt="People Icon" width="20px" style="margin-left: 2px; margin-right: 2px;"/>
+                                        &nbsp;&nbsp;Mapa
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item" id="logout">
+                                <a href="{% url 'rewards' %}" class="nav-link">
+                                    <div>
+                                        <div>
+                                            <img src="/media/credits.png" alt="People Icon" width="24px" />
+                                            &nbsp;&nbsp;Rewards
+                                        </div>
+    
+                                    </div>
+                                </a>
+                            </li>
+                            
+                        {% else %}
+                            <li class="nav-item" id="login">
+                                <a href="{% url 'login' %}" class="nav-link">
+                                    <div>
+                                        <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-door-closed" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2zm1 0v13h8V2H4z"/>
+                                            <path d="M7 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                            <path fill-rule="evenodd" d="M1 15.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/>
+                                        </svg>
+                                        &nbsp;&nbsp;Log In
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item" id="Signup">
+                                <a href="{% url 'register' %}" class="nav-link">
+                                    <div>
+                                        <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-person-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M11 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM1.022 13h9.956a.274.274 0 0 0 .014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 0 0 .022.004zm9.974.056v-.002.002zM6 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm4.5 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                                            <path fill-rule="evenodd" d="M13 7.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z"/>
+                                        </svg>
+                                        &nbsp;&nbsp;Registrar
+                                    </div>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
                                         <div style="position: absolute; bottom: 10px;">
                                             {% if user.is_authenticated %}    
                                                 <li class="nav-item sidenav-user">
@@ -389,57 +436,38 @@
                                         </li>
                                     {% endif %}
                                 </ul>
-    
+                    
+                    
     
             </div>
 
+        <!-- Main content -->
+        <div class="content-container">
             <div class="creditos-ofertas">
+                <h1>Bem-vindo de volta, {{ user.first_name }}!</h1>
+                <p>Você possui um total de <span class="preco"><strong>{{ saldo }}</strong> Creditos</span></p>
+            </div>
             <div class="ofertas-container">
                 {% for oferta in ofertas %}
-                <div class="oferta-card">
-                    <div class="creditos-disponiveis">
-                        Custo: {{ oferta.valor_em_creditos }} Crédito(s)
+                    <div class="oferta-card">
+                        <div class="creditos-disponiveis">
+                            Custo: {{ oferta.valor_em_creditos }} Crédito(s)
+                        </div>
+                        <img src="{{ oferta.imagem.url }}" alt="{{ oferta.nome }}">
+                        <div class="oferta-card-content">
+                            <h3>{{ oferta.nome }}</h3>
+                            <p>{{ oferta.descricao }}</p>
+                            {% if saldo >= oferta.preco %}
+                                <a href="{% url 'resgatar' oferta.id %}" class="btn-resgatar">Resgatar</a>
+                            {% else %}
+                                <button class="btn-resgatar" disabled>Saldo Insuficiente</button>
+                            {% endif %}
+                        </div>
                     </div>
-                    <img src="{{ oferta.imagem.url }}" alt="{{ oferta.nome }}">
-                    <div class="oferta-card-content">
-                        <h3>{{ oferta.nome }}</h3>
-                        <p>{{ oferta.descricao }}</p>
-                        <button
-                            type="button"
-                            class="btn-resgatar"
-                            data-oferta-id="{{ oferta.id }}"
-                            onclick="resgatarOferta(this)"
-                            {% if saldo < oferta.valor_em_creditos %}disabled{% endif %}
-                        >
-                            {% if saldo >= oferta.valor_em_creditos %}Resgatar Oferta{% else %}Créditos insuficientes{% endif %}
-                        </button>
-                    </div>
-                </div>
-                <script>
-                    function resgatarOferta(button) {
-                        const ofertaId = button.getAttribute('data-oferta-id');
-                        fetch(`/resgatar-oferta/${ofertaId}/`, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRFToken': '{{ csrf_token }}',
-                            },
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                button.disabled = true;
-                                button.textContent = "Resgatado";
-                                button.classList.add("btn-resgatar-disabled");
-                            } else {
-                                alert(data.error);
-                            }
-                        });
-                    }
-                </script>
-                {% empty %}
-                    <p>Ainda não há ofertas disponíveis.</p>
                 {% endfor %}
             </div>
         </div>
+    </div>
+
 </body>
 </html>

@@ -35,10 +35,11 @@ urlpatterns = [
     path("<str:username>/follow", views.follow, name="followuser"),
     path("<str:username>/unfollow", views.unfollow, name="unfollowuser"),
     path("n/post/<int:post_id>/edit", views.edit_post, name="editpost"),
-    path("n/creditos", views.credits_view, name="credits"),
     path("n/resgatar_oferta", views.resgatar_oferta, name="resgatar_oferta"),
     path("n/rewards", views.rewards, name="rewards"),
     path("resgatar-oferta/<int:oferta_id>/", views.resgatar_oferta, name="resgatar_oferta"),
+    path('resgates/', views.resgates, name='resgates'),
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -119,3 +119,8 @@ class MapPoint(models.Model):
     
     def __str__(self):
         return f"{self.name} ({self.latitude}, {self.longitude})"
+    
+class Resgate(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    oferta = models.ForeignKey(Reward, on_delete=models.CASCADE)
+    data_resgate = models.DateTimeField(auto_now_add=True)
