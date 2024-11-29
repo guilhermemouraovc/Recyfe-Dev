@@ -1,0 +1,169 @@
+{% load static %}
+{% load omfilters %}
+
+
+<div class="row">
+    <script>
+        function enviarPedidoWhatsApp(event) {
+            event.preventDefault();
+
+            // Seleciona todas as linhas da tabela, exceto a primeira (cabeçalho)
+            const linhas = document.querySelectorAll('table tr:not(:first-child)');
+            let mensagem = '*Pedido de Compra*\n\n';
+            let totalPedido = 0;
+    
+            // Itera sobre as linhas da tabela
+            linhas.forEach(linha => {
+                const produto = linha.querySelector('td:nth-child(2)').textContent.trim(); // Produto
+                const variacao = linha.querySelector('td:nth-child(3)').textContent.trim(); // Variação
+                const quantidade = linha.querySelector('td:nth-child(4)').textContent.trim(); // Quantidade
+                const precoTotal = parseFloat(linha.querySelector('td:nth-child(5)').textContent.trim().replace('R$', '').replace(',', '.')); // Preço Total
+
+                // Formata a mensagem
+                mensagem += `Produto: *${produto}*\n`;
+                mensagem += `Variação: ${variacao}\n`;
+                mensagem += `Quantidade: ${quantidade}\n`;
+                mensagem += `Total do Produto: R$ ${precoTotal.toFixed(2).replace('.', ',')}\n\n`;
+    
+                totalPedido += precoTotal;
+            });
+    
+            // Adiciona o valor total do pedido na mensagem
+            mensagem += `*Valor Total do Pedido*: R$ ${totalPedido.toFixed(2).replace('.', ',')}`;
+            
+            // Codifica a mensagem e abre o WhatsApp com a URL correta
+            const mensagemCodificada = encodeURIComponent(mensagem);
+            window.open(`https://wa.me/5581999434582?text=${mensagemCodificada}`, '_blank');
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.style.width === '250px') {
+                sidebar.style.width = '0';
+            } else {
+                sidebar.style.width = '250px';
+            }
+        }
+    
+        function toggleDropdown(element) {
+            const dropdownMenu = element.nextElementSibling;
+            dropdownMenu.classList.toggle('show');
+        }   
+    </script>
+
+    <script>
+        function enviarEmailPedido(event) {
+            event.preventDefault();
+        
+            const pedidoId = "{{ pedido.id }}";
+            const total = "{{ pedido.total|formata_preco }}";
+            const linhas = document.querySelectorAll('table tr:not(:first-child)');
+            const itens = Array.from(linhas).map(linha => {
+                const produto = linha.querySelector('td:nth-child(2)').textContent.trim();
+                const variacao = linha.querySelector('td:nth-child(3)').textContent.trim();
+                const quantidade = linha.querySelector('td:nth-child(4)').textContent.trim();
+                const precoTotal = linha.querySelector('td:nth-child(5)').textContent.trim();
+        
+                return {
+                    produto: produto,
+                    variacao: variacao,
+                    quantidade: quantidade,
+                    total: precoTotal
+                };
+            });
+        
+            fetch("/enviar_email_pedido/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}",
+                },
+                body: JSON.stringify({
+                    pedido_id: pedidoId,
+                    total: total,
+                    itens: itens
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'sucesso') {
+                    alert(data.mensagem);
+                } else {
+                    alert(`Erro: ${data.mensagem}`);
+                }
+            })
+            .catch(error => {
+                alert('Erro ao enviar o e-mail.');
+            });
+        }
+    </script>
+    
+    <div class="col">
+        <h3>{{ pedido }}</h3>
+
+        <div class="row mt-4">
+            <div class="col-lg-2 font-weight-bold">Número do pedido:</div>
+            <div class="col-lg-4">{{ pedido.id }}</div>
+            <div class="col-lg-2 font-weight-bold">Total a pagar:</div>
+            <div class="col-lg-4">{{ pedido.total|formata_preco }}</div>
+
+            <div class="col-lg-2 font-weight-bold">QTD. Itens:</div>
+            <div class="col-lg-4">{{ pedido.qtd_total }}</div>
+            <div class="col-lg-2 font-weight-bold">Status:</div>
+            <div class="col-lg-4">{{ pedido.get_status_display }}</div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col">
+                <h3>Produtos</h3>
+            </div>
+        </div>
+
+        <div class="table-responsive mt-3">
+            <table class="table">
+                <tr>
+                    <th class="d-none d-lg-block">Imagem</th>
+                    <th>Produto</th>
+                    <th>V.</th>
+                    <th>QTD.</th>
+                    <th>Total</th>
+                </tr>
+
+                {% for linha in pedido.itempedido_set.all %}
+                <tr>
+                    <td class="d-none d-lg-block">
+                        <img class="cart-img" src="{% get_media_prefix %}{{ linha.imagem }}">
+                    </td>
+                    <td>{{ linha.produto }}</td>
+                    <td>{{ linha.variacao }}</td>
+                    <td>{{ linha.quantidade }}</td>
+                    <td>
+                        {% if linha.preco_promocional %}
+                        {{ linha.preco_promocional|formata_preco }}
+                        {% else %}
+                        {{ linha.preco|formata_preco }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </table>
+            {% if request.user.is_authenticated %}
+                <a href="#" class="btn btn-primary btn-block btn-lg" onclick="enviarPedidoWhatsApp(event)"  target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+                    </svg>
+                Fazer Pedido pelo WhatsApp
+            </a>
+            
+        
+            {% else %}
+        <a class="btn btn-lg btn-block btn-primary" href="{% url 'register' %}">
+            Entrar ou cadastrar e comprar
+        </a>
+        {% endif %}
+        </div>
+    </div>
+
+    
+</div>

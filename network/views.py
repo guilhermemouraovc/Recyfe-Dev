@@ -1,16 +1,23 @@
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
-from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import EmailMessage, send_mail
 from django.core.paginator import Paginator
+from django.db import IntegrityError, transaction
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, render, redirect
+from django.template.loader import render_to_string
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from .models import Resgate, User, UserCredits, Reward, UserReward
+
 import json
 
-from .models import *
+from .models import User, Post, Comment, Follower, UserCredits, Reward, CreditCode, MapPoint
+from ecommerce.pedido.models import Pedido, ItemPedido
 
-
+    
 def index(request):
     all_posts = Post.objects.all().order_by('-date_created')
     paginator = Paginator(all_posts, 10)
@@ -56,6 +63,8 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("index"))
 
 
+from .models import UserCredits
+
 def register(request):
     if request.method == "POST":
         username = request.POST["username"]
@@ -63,11 +72,8 @@ def register(request):
         fname = request.POST["firstname"]
         lname = request.POST["lastname"]
         profile = request.FILES.get("profile")
-        print(f"--------------------------Profile: {profile}----------------------------")
         cover = request.FILES.get('cover')
-        print(f"--------------------------Cover: {cover}----------------------------")
 
-        # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
@@ -75,7 +81,6 @@ def register(request):
                 "message": "Passwords must match."
             })
 
-        # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
             user.first_name = fname
@@ -84,19 +89,26 @@ def register(request):
                 user.profile_pic = profile
             else:
                 user.profile_pic = "profile_pic/no_pic.png"
-            user.cover = cover           
+            user.cover = cover
             user.save()
+
+            # Criação automática dos créditos para o novo usuário
+            user_credits = UserCredits(user=user)  # Cria o objeto de créditos
+            user_credits.save()  # Salva o objeto no banco de dados
+            
             Follower.objects.create(user=user)
         except IntegrityError:
             return render(request, "network/register.html", {
                 "message": "Username already taken."
             })
+        
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
 
-
+def email(request):
+    return render(request, 'parciais/_email.html')
 
 def profile(request, username):
     user = User.objects.get(username=username)
@@ -168,7 +180,109 @@ def saved(request):
     else:
         return HttpResponseRedirect(reverse('login'))
         
+@csrf_exempt
+def enviar_email_pedido(request):
+    """
+    View para processar o envio de email com detalhes do pedido.
+    Aceita requisições POST com dados do pedido em JSON.
+    """
+    if request.method != 'POST':
+        return JsonResponse({
+            'status': 'erro',
+            'mensagem': 'Método inválido.'
+        })
 
+    try:
+        # Processa os dados da requisição
+        dados = json.loads(request.body)
+        pedido_id = dados.get('pedido_id')
+        total = dados.get('total')
+        itens = dados.get('itens', [])
+        usuario = request.user
+
+        def limpar_valor(valor):
+            """Converte strings de valor monetário para float."""
+            return float(valor.replace('R$', '').replace(' ', '').replace(',', '.'))
+
+        # Processa o valor total
+        try:
+            total = limpar_valor(total)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'erro',
+                'mensagem': f'Erro ao processar o total: {str(e)}'
+            })
+
+        # Valida a estrutura dos itens
+        if not isinstance(itens, list):
+            return JsonResponse({
+                'status': 'erro',
+                'mensagem': 'Itens não são uma lista válida.'
+            })
+
+        # Processa cada item do pedido
+        for item in itens:
+            if not isinstance(item, dict):
+                return JsonResponse({
+                    'status': 'erro',
+                    'mensagem': f'O item {item} não é um dicionário válido.'
+                })
+
+            if 'total' not in item:
+                return JsonResponse({
+                    'status': 'erro',
+                    'mensagem': f'O item {item} não contém a chave "total".'
+                })
+
+            try:
+                item['total'] = limpar_valor(item['total'])
+            except Exception as e:
+                return JsonResponse({
+                    'status': 'erro',
+                    'mensagem': f'Erro ao processar item {item.get("produto", "desconhecido")}: {str(e)}'
+                })
+
+        # Prepara os dados para o template
+        pedido = {
+            'id': pedido_id,
+            'total': total,
+            'usuario': usuario,
+        }
+
+        # Renderiza o template do email
+        mensagem_html = render_to_string(
+            'parciais/_email.html',
+            {
+                'pedido': pedido,
+                'itens': itens
+            }
+        )
+
+        # Envia o email
+        send_mail(
+            subject='Detalhes do Pedido',
+            message='',  # Corpo em texto simples
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[request.user.email],
+            fail_silently=False,
+            html_message=mensagem_html
+        )
+
+        return JsonResponse({
+            'status': 'sucesso',
+            'mensagem': 'E-mail enviado com sucesso!'
+        })
+
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'status': 'erro',
+            'mensagem': 'Erro ao processar os dados do pedido. Formato JSON inválido.'
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'erro',
+            'mensagem': f'Erro inesperado: {str(e)}'
+        })
 
 @login_required
 def create_post(request):
@@ -369,3 +483,129 @@ def delete_post(request, post_id):
             return HttpResponse("Method must be 'PUT'")
     else:
         return HttpResponseRedirect(reverse('login'))
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        user = request.user
+        
+        # Update first and last name
+        user.first_name = request.POST.get('first_name', user.first_name)
+        user.last_name = request.POST.get('last_name', user.last_name)
+        
+        # Update profile picture
+        profile_pic = request.FILES.get('profile_pic')
+        if profile_pic:
+            user.profile_pic = profile_pic
+        
+        # Update cover image
+        cover = request.FILES.get('cover')
+        if cover:
+            user.cover = cover
+        
+        # Update bio
+        bio = request.POST.get('bio')
+        if bio:
+            user.bio = bio
+        
+        user.save()
+        
+        messages.success(request, 'Perfil atualizado com sucesso!')
+        return redirect('profile', username=user.username)
+    
+    return render(request, 'network/edit_profile.html')
+    
+@login_required
+def credits_view(request):
+    user_credits, _ = UserCredits.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        code = request.POST.get("credit_code", "").strip()
+        try:
+            credit_code = CreditCode.objects.get(codigo=code)
+            if credit_code.utilizado:
+                messages.error(request, "Este código já foi utilizado.")
+            else:
+                credit_code.redeem(request.user)  
+                messages.success(request, f"{credit_code.saldo} créditos adicionados!")
+        except CreditCode.DoesNotExist:
+            messages.error(request, "Código inválido.")
+
+    return render(request, "network/credits.html", {
+    "username": request.user.username,
+    "saldo": user_credits.saldo
+    })
+
+def map_view(request):
+    points = MapPoint.objects.all()
+    points_data = [
+        {
+            "name": point.name,
+            "description": point.description,
+            "latitude": point.latitude,
+            "longitude": point.longitude,
+        }
+        for point in points
+    ]
+    return render(request, 'map.html', {'points': json.dumps(points_data)})
+
+def rewards(request):
+    # Obtenha todas as ofertas disponíveis
+    ofertas = Reward.objects.all()
+
+    # IDs das ofertas já resgatadas pelo usuário atual
+    resgates_ids = Resgate.objects.filter(usuario=request.user).values_list('oferta_id', flat=True)
+
+    # Obtenha o saldo do usuário
+    user_credits = UserCredits.objects.filter(user=request.user).first()
+    saldo = user_credits.saldo if user_credits else 0
+
+    return render(request, 'network/rewards.html', {
+        'ofertas': ofertas,  # Todas as ofertas disponíveis
+        'saldo': saldo,      # Saldo do usuário
+        'resgates_ids': list(resgates_ids)
+
+    })
+
+
+@login_required
+def resgatar_oferta(request, oferta_id):
+    if request.method == "POST":
+        try:
+            # Obter a oferta
+            oferta = get_object_or_404(Reward, id=oferta_id)
+
+            # Verificar se o resgate já existe
+            if Resgate.objects.filter(usuario=request.user, oferta=oferta).exists():
+                return JsonResponse({"success": False, "error": "Você já resgatou esta oferta."}, status=400)
+
+            # Obter o saldo do usuário
+            user_credits, _ = UserCredits.objects.get_or_create(user=request.user)
+
+            if user_credits.saldo < oferta.valor_em_creditos:
+                return JsonResponse({"success": False, "error": "Saldo insuficiente para resgatar esta oferta."}, status=400)
+
+            # Criar o resgate
+            with transaction.atomic():
+                user_credits.saldo -= oferta.valor_em_creditos
+                user_credits.save()
+
+                resgate = Resgate.objects.create(usuario=request.user, oferta=oferta)
+                print(f"Resgate criado: {resgate}")  # Adicione este print para verificar
+
+            return JsonResponse({"success": True, "message": f"Oferta '{oferta.nome}' resgatada com sucesso!"})
+
+        except Reward.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Oferta não encontrada."}, status=404)
+
+        except Exception as e:
+            return JsonResponse({"success": False, "error": f"Ocorreu um erro inesperado: {str(e)}"}, status=500)
+
+    return JsonResponse({"error": "Método inválido."}, status=400)
+
+
+@login_required
+def resgates(request):
+    resgates = Resgate.objects.filter(usuario=request.user).select_related('oferta')
+    print(resgates)  # Verificar se existem resultados
+    return render(request, 'network/resgates.html', {'resgates': resgates})

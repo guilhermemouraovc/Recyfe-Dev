@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+{% load omfilters %}
+{% load static %}
+
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmação de Pedido #{{ pedido.id }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .pedido-numero {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .saudacao {
+            margin-bottom: 20px;
+            color: #555;
+        }
+        .item-pedido {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #fff;
+        }
+        .item-container {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .item-imagem {
+            width: 100px;
+            min-width: 100px;
+        }
+        .item-imagem img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .item-info {
+            flex: 1;
+        }
+        .item-nome {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+        .item-detalhe {
+            margin: 5px 0;
+            color: #555;
+        }
+        .total-pedido {
+            text-align: right;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+        }
+        .total-valor {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 0;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1 class="pedido-numero">Detalhes do Pedido #{{ pedido.id }}</h1>
+        <div class="saudacao">
+            Olá {{ pedido.usuario.first_name }},<br>
+            Segue abaixo os detalhes do seu pedido:
+        </div>
+    </div>
+
+    <div class="pedido-items">
+        {% for item in itens %}
+        <div class="item-pedido">
+            <div class="item-container">
+                <div class="item-info">
+                    <h3 class="item-nome">{{ item.produto }}</h3>
+                    <div class="item-detalhe">
+                        <strong>Variação:</strong> {{ item.variacao }}
+                    </div>
+                    <div class="item-detalhe">
+                        <strong>Quantidade:</strong> {{ item.quantidade }}
+                    </div>
+                    <div class="item-detalhe">
+                        <strong>Preço Total:</strong> R$ {{ item.total|formata_preco }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="total-pedido">
+        <h3 class="total-valor">Total do Pedido: R$ {{ pedido.total|formata_preco }}</h3>
+    </div>
+
+    <div class="footer">
+        <p>Realizar o Pagamento Via WhatsApp!</p>
+        <p>Obrigado por comprar conosco!</p>
+    </div>
+</body>
+</html>

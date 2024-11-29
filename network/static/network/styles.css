@@ -58,20 +58,24 @@ svg{
     z-index: 100;
     padding-left: 3%;
     background-color: white;
+    
 }
 .sidenav ul{
     list-style: none;
     padding-left: 0px;
     margin-top: 3vh;
 }
+
 .sidenav li{
     margin-top: 7px;
 }
+
 .sidenav .nav-link{
     color: #14171a;
     line-height: .7em;
     font-weight: 700;
     padding: 0px;
+    
 }
 .sidenav .nav-link > div{
     padding: 10px 20px 8px 12px;

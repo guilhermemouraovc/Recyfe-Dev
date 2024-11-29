@@ -1,0 +1,267 @@
+{% load omfilters %}
+{% load static %}
+
+<style>
+.navbar-custom {
+    background-color: white !important; /* Substitui cores padrão */
+}
+    
+.botaoMenu {
+    background-color: transparent; /* Remove o fundo */
+    border: none;                 /* Remove a borda */
+    cursor: pointer;              /* Adiciona o cursor de pointer ao passar o mouse */
+    padding: 0;                   /* Remove espaçamentos extras */
+}
+
+.sidebar-content img{
+    display: block; /* Remove margens em volta da imagem */
+    margin: auto;   /* Centraliza horizontalmente */
+    vertical-align: middle; /* Alinha verticalmente */
+}
+
+
+.sidebar ul .nav-item img {
+    transition: filter 0.3s; /* Adiciona uma transição suave para o ícone */
+}
+
+.sidebar .nav-link:hover {
+    background-color: #e0f2e9;
+    color: #28a745;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #ffffff;
+    overflow-y: auto;
+    padding: 20px 0;
+    border-right: 1px solid #d3d3d3; /* Linha vertical preta à direita da navbar */
+    height: 100vh; /* Garante que a navbar tenha a altura total da página */
+}
+
+.sidebar img.logo {
+    display: block;
+    margin: 0 auto 20px;
+    margin-left: 5px;
+    max-width: 150px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar .nav-item {
+    margin-bottom: 10px;
+}
+
+.sidenav ul .nav-item img {
+    transition: filter 0.3s; /* Adiciona uma transição suave para o ícone */
+}
+
+.sidebar .nav-link {
+    display: inline-block;
+    align-items: center;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 12px;
+}
+
+
+.sidebar .nav-link div {
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .nav-link svg {
+    margin-right: 10px;
+}
+
+.close-sidebar {
+    display: none;
+}
+
+.sidebar ul .nav-item img {
+    transition: filter 0.3s; /* Adiciona uma transição suave para o ícone */
+}
+
+.sidebar ul .nav-item:hover img {
+    filter: brightness(0) saturate(100%) invert(50%) sepia(70%) saturate(600%) hue-rotate(85deg) brightness(90%) contrast(85%);
+    /* Torna o ícone verde ao passar o mouse */
+}
+
+.sidebar ul .nav-item:hover .nav-link {
+    color: #28a745; /* Torna o texto verde ao passar o mouse */
+}
+
+.nav-cart-icon {
+    color: #28a745; /* Define o ícone como verde */
+}
+
+.nav-cart-icon i {
+    color: #28a745; /* Verde para o ícone do carrinho */
+}
+
+.nav-cart-text {
+    color: #28a745 !important; /* Cor verde */
+    font-weight: bold;
+}
+
+/* Estiliza o ícone do carrinho */
+.nav-cart-icon i {
+    color: #28a745 !important; /* Cor verde */
+}
+
+.nav-cart-count strong {
+    color: #28a745 !important; /* Verde para a quantidade do carrinho */
+}
+
+</style>
+
+
+<nav class="navbar navbar-light navbar-custom navbar-expand-lg">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            {% if request.user.is_authenticated %}
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Entrar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'register' %}">Criar conta</a>
+            </li>
+            {% endif %}
+
+            {% if request.session.carrinho %}
+            <li class="nav-item">
+                <a class="nav-link nav-cart-link active" href="{% url 'produto:carrinho' %}">
+                    <span class="nav-cart-text mr-1">
+                        Carrinho
+                    </span>
+                    <span class="nav-cart-count mr-1">
+                        <strong>{{ request.session.carrinho|cart_total_qtd }}x</strong>
+                    </span>
+                    <span class="nav-cart-icon mr-2">
+                        <i class="fas fa-shopping-cart"></i>
+                    </span>
+                </a>
+            </li>
+            {% endif %}
+
+
+        </ul>
+        <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'produto:busca' %}">
+            <input name="termo" value="{{ request.GET.termo }}" class="form-control mr-sm-2" type="search"
+                placeholder="Busca" aria-label="Busca">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Busca</button>
+        </form>
+    </div>
+    
+</nav>
+
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-content">
+            <img src="{% static 'network/Images/logo-transparent.png' %}" height="50px" alt="Recyfe Logo" class="logo">
+            <ul>
+                <!-- Todos os posts -->
+                <li class="nav-item" id="all_posts">
+                    <a href="{% url 'index' %}" class="nav-link">
+                        <div>
+                            <img src="/media/home.png" alt="Home Icon" width="20px" style="margin-left: 2px; margin-right: 2px;"/>
+                            &nbsp;&nbsp;Home
+                        </div>
+                    </a>
+                    </li>
+                {% if user.is_authenticated %}
+                                    <li class="nav-item" id="profile">
+                                        <a href="{% url 'profile' user.username %}" class="nav-link">
+                                            <div>
+                                                <img src="/media/perfil.png" alt="People Icon" width="20px" style="margin-left: 2px; margin-right: 2px;"/>
+                                                &nbsp;&nbsp;Perfil
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item active" id="Signup">
+                                        <a href="{% url 'produto:lista' %}" class="nav-link">
+                                            <div>
+                                                <img src="/media/carrinho_icon.png" alt="People Icon" width="24px" />
+                                                &nbsp;&nbsp;Ecommerce
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" id="Signup">
+                                        <a href="{% url 'mapa' %}" class="nav-link">
+                                            <div>
+                                                <img src="/media/bussola.png" alt="People Icon" width="24px" />
+                                                &nbsp;&nbsp;Mapa
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" id="logout">
+                                        <a href="{% url 'rewards' %}" class="nav-link">
+                                            <div>
+                                                <div>
+                                                    <img src="/media/troca.png" alt="People Icon" width="24px" />
+                                                    &nbsp;&nbsp;Rewards
+                                                </div>
+            
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <div style="position: absolute; bottom: 10px;">
+                                        {% if user.is_authenticated %}    
+                                            <li class="nav-item sidenav-user">
+                                                <a href="{% url 'profile' user.username %}" class="nav-link">
+                                                    <div class="user_account">
+                                                        <div class="small-profilepic" style="float: left; background-image: url(media/{{user.profile_pic}})"></div>
+                                                        <div style="height: 2.7vw; margin: auto;">
+                                                            <div style="margin-top: 4px;"><strong>{{user.first_name}} {{user.last_name}}</strong></div>
+                                                            <div class="grey" style="margin-top: 4px;">@{{ user.username }}</div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if user.is_authenticated %}
+                                            <input type="hidden" id="user_is_authenticated" value="True" data-username='{{user.username}}'>
+                                        {% else %}
+                                            <input type="hidden" id="user_is_authenticated" value="False">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                    
+                        {% else %}
+                                    <li class="nav-item" id="login">
+                                        <a href="{% url 'login' %}" class="nav-link">
+                                            <div>
+                                                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-door-closed" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2zm1 0v13h8V2H4z"/>
+                                                    <path d="M7 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                                    <path fill-rule="evenodd" d="M1 15.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/>
+                                                </svg>
+                                                &nbsp;&nbsp;Log In
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" id="Signup">
+                                        <a href="{% url 'register' %}" class="nav-link">
+                                            <div>
+                                                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-person-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" d="M11 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM1.022 13h9.956a.274.274 0 0 0 .014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 0 0 .022.004zm9.974.056v-.002.002zM6 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm4.5 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                                                    <path fill-rule="evenodd" d="M13 7.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z"/>
+                                                </svg>
+                                                &nbsp;&nbsp;Registrar
+                                            </div>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                
+                
+
+        </div>
+    </div>
+

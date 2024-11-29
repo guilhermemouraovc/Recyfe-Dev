@@ -19,4 +19,9 @@ from django.urls import include, path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("network.urls")),
+    path('loja/', include('ecommerce.loja.urls')),
+    path('pedido/', include('ecommerce.pedido.urls', namespace="pedido")),
+    path('perfil/', include('ecommerce.perfil.urls')),
+    path('produto/', include('ecommerce.produto.urls')),
+
 ]
