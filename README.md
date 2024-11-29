@@ -300,7 +300,7 @@ Então uma mensagem "Nenhum crédito disponível para os itens reciclados" deve 
 ## Deployment das histórias produzidas:
 
 - Projeto na Azure
-- Screencast da Azure
+- [Screencast da Azure](https://www.youtube.com/watch?v=rpudy51SZjA)
 
 ## 10 Histórias de Usuário Bem Definidas:
 
