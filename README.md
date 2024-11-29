@@ -294,12 +294,11 @@ Então uma mensagem "Nenhum crédito disponível para os itens reciclados" deve 
 - [Projeto no Jira](https://cesar-team-pkcqpghh.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?selectedIssue=SCRUM-5)
 - [Protótipo de Média Fidelidade no Figma](https://www.figma.com/design/r7UbvzWSKmMyssPNiVZ9aN/Prot%C3%B3tipo-m%C3%A9dia-fidelidade?node-id=3-16&node-type=canvas&t=Hs3Z2o3N54AUvip7-0)
 - [Screencast do Protótipo de Média Fidelidade](https://youtu.be/sY4a9ruACbE)
-- Screencast CI/CD com Build e Deployment Automatizado
-- Screencast da Execução dos Testes
+- [Screencast da Execução dos Testes](https://www.youtube.com/watch?v=vvllLXazW7E)
 
 ## Deployment das histórias produzidas:
 
-- Projeto na Azure
+- [Projeto na Azure](https://recyfe.azurewebsites.net/)
 - Screencast da Azure
 
 ## 10 Histórias de Usuário Bem Definidas:
