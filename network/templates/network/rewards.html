@@ -433,11 +433,11 @@
         <div class="content-container">
             <div class="creditos-ofertas">
                 <h1>Bem-vindo de volta, {{ user.first_name }}!</h1>
-                <p>Você possui um total de <span class="preco"><strong>{{ saldo }}</strong> Creditos</span></p>
+                <p>Você possui um total de <span class="preco"><strong>{{ saldo }}</strong> Créditos</span></p>
             </div>
             <div class="ofertas-container">
                 {% for oferta in ofertas %}
-                    <div class="oferta-card">
+                    <div class="oferta-card" id="oferta-{{ oferta.id }}">
                         <div class="creditos-disponiveis">
                             Custo: {{ oferta.valor_em_creditos }} Crédito(s)
                         </div>
@@ -445,8 +445,11 @@
                         <div class="oferta-card-content">
                             <h3>{{ oferta.nome }}</h3>
                             <p>{{ oferta.descricao }}</p>
-                            {% if saldo >= oferta.preco %}
-                                <a href="{% url 'resgatar' oferta.id %}" class="btn-resgatar">Resgatar</a>
+                            {% if saldo >= oferta.valor_em_creditos %}
+                                <form class="resgatar-form" data-oferta-id="{{ oferta.id }}" method="POST" action="{% url 'resgatar' oferta.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-resgatar">Resgatar</button>
+                                </form>
                             {% else %}
                                 <button class="btn-resgatar" disabled>Saldo Insuficiente</button>
                             {% endif %}
@@ -455,6 +458,38 @@
                 {% endfor %}
             </div>
         </div>
+        
+        <script>
+            document.querySelectorAll(".resgatar-form").forEach((form) => {
+                form.addEventListener("submit", function (event) {
+                    event.preventDefault(); // Evita o envio padrão do formulário
+        
+                    const ofertaId = this.dataset.ofertaId;
+                    const formData = new FormData(this);
+        
+                    fetch(this.action, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": formData.get("csrfmiddlewaretoken"),
+                        },
+                        body: formData,
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if (data.success) {
+                                alert(data.message);
+                                // Atualizar a página ou o saldo aqui, se necessário
+                                document.querySelector(`#oferta-${ofertaId}`).remove();
+                            } else {
+                                alert(data.error);
+                            }
+                        })
+                        .catch((error) => console.error("Erro:", error));
+                });
+            });
+        </script>
+        
+        
     </div>
 
 </body>

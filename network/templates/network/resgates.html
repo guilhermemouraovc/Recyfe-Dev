@@ -33,22 +33,30 @@ h2 {
 }
 
 /* Container de ofertas */
+
 .ofertas-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap; /* Permite quebra de linha para dispositivos menores */
+    gap: 20px; /* Espaçamento entre os cartões */
+    justify-content: center; /* Centraliza os cartões */
+    margin: 20px auto;
+    padding: 0 10px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Estilo do cartão da oferta */
 .oferta-card {
     background-color: white;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     transition: transform 0.3s ease;
     position: relative;
-    width: 100%;
+    display: flex;
+    flex-direction: column; /* Mantém o conteúdo empilhado verticalmente */
+    width: 300px; /* Define a largura fixa dos cartões */
+    flex-grow: 0; /* Evita que os cartões se expandam */
 }
 
 .oferta-card:hover {
@@ -122,6 +130,8 @@ h2 {
     font-size: 1.2rem;
     color: #999;
 }
+
+
 </style>
 
 <style>
@@ -401,6 +411,7 @@ h2 {
             </div>
         {% endfor %}
     </div>
+
 {% else %}
     <p class="text-center">Você ainda não resgatou nenhuma oferta.</p>
 {% endif %}
